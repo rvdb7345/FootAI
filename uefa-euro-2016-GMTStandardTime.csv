@@ -1,0 +1,52 @@
+Match Number,Round Number,Date,Location,Home Team,Away Team,Group,Result
+1,1,10/06/2016 20:00,Stade de France,France,Romania,Group A,2 - 1
+2,1,11/06/2016 14:00,Stade Bollaert-Delelis,Albania,Switzerland,Group A,0 - 1
+7,1,11/06/2016 17:00,Nouveau Stade de Bordeaux,Wales,Slovakia,Group B,2 - 1
+8,1,11/06/2016 20:00,Stade Vélodrome,England,Russia,Group B,1 - 1
+19,1,12/06/2016 14:00,Parc des Princes,Turkey,Croatia,Group D,0 - 1
+13,1,12/06/2016 17:00,Allianz Riviera,Poland,Northern Ireland,Group C,1 - 0
+14,1,12/06/2016 20:00,Stade Pierre-Mauroy,Germany,Ukraine,Group C,2 - 0
+20,1,13/06/2016 14:00,Stadium Municipal,Spain,Czech Republic,Group D,1 - 0
+25,1,13/06/2016 17:00,Stade de France,Republic of Ireland,Sweden,Group E,1 - 1
+26,1,13/06/2016 20:00,Parc Olympique Lyonnais,Belgium,Italy,Group E,0 - 2
+31,1,14/06/2016 17:00,Nouveau Stade de Bordeaux,Austria,Hungary,Group F,0 - 2
+32,1,14/06/2016 20:00,Stade Geoffroy-Guichard,Portugal,Iceland,Group F,1 - 1
+9,2,15/06/2016 14:00,Stade Pierre-Mauroy,Russia,Slovakia,Group B,1 - 2
+3,2,15/06/2016 17:00,Parc des Princes,Romania,Switzerland,Group A,1 - 1
+4,2,15/06/2016 20:00,Stade Vélodrome,France,Albania,Group A,2 - 0
+10,2,16/06/2016 14:00,Stade Bollaert-Delelis,England,Wales,Group B,2 - 1
+15,2,16/06/2016 17:00,Parc Olympique Lyonnais,Ukraine,Northern Ireland,Group C,0 - 2
+16,2,16/06/2016 20:00,Stade de France,Germany,Poland,Group C,0 - 0
+27,2,17/06/2016 14:00,Stadium Municipal,Italy,Sweden,Group E,1 - 0
+21,2,17/06/2016 17:00,Stade Geoffroy-Guichard,Czech Republic,Croatia,Group D,2 - 2
+22,2,17/06/2016 20:00,Allianz Riviera,Spain,Turkey,Group D,3 - 0
+28,2,18/06/2016 14:00,Nouveau Stade de Bordeaux,Belgium,Republic of Ireland,Group E,3 - 0
+33,2,18/06/2016 17:00,Stade Vélodrome,Iceland,Hungary,Group F,1 - 1
+34,2,18/06/2016 20:00,Parc des Princes,Portugal,Austria,Group F,0 - 0
+5,3,19/06/2016 20:00,Stade Pierre-Mauroy,Switzerland,France,Group A,0 - 0
+6,3,19/06/2016 20:00,Parc Olympique Lyonnais,Romania,Albania,Group A,0 - 1
+11,3,20/06/2016 20:00,Stade Geoffroy-Guichard,Slovakia,England,Group B,0 - 0
+12,3,20/06/2016 20:00,Stadium Municipal,Russia,Wales,Group B,0 - 3
+17,3,21/06/2016 17:00,Parc des Princes,Northern Ireland,Germany,Group C,0 - 1
+18,3,21/06/2016 17:00,Stade Vélodrome,Ukraine,Poland,Group C,0 - 1
+23,3,21/06/2016 20:00,Nouveau Stade de Bordeaux,Croatia,Spain,Group D,2 - 1
+24,3,21/06/2016 20:00,Stade Bollaert-Delelis,Czech Republic,Turkey,Group D,0 - 2
+35,3,22/06/2016 17:00,Stade de France,Iceland,Austria,Group F,2 - 1
+36,3,22/06/2016 17:00,Parc Olympique Lyonnais,Hungary,Portugal,Group F,3 - 3
+29,3,22/06/2016 20:00,Allianz Riviera,Sweden,Belgium,Group E,0 - 1
+30,3,22/06/2016 20:00,Stade Pierre-Mauroy,Italy,Republic of Ireland,Group E,0 - 1
+37,Round of 16,25/06/2016 14:00,Stade Geoffroy-Guichard,Switzerland,Poland,,1 - 1
+38,Round of 16,25/06/2016 17:00,Parc des Princes,Wales,Northern Ireland,,1 - 0
+39,Round of 16,25/06/2016 20:00,Stade Bollaert-Delelis,Croatia,Portugal,,0 - 1
+40,Round of 16,26/06/2016 14:00,Parc Olympique Lyonnais,France,Republic of Ireland,,2 - 1
+41,Round of 16,26/06/2016 17:00,Stade Pierre-Mauroy,Germany,Slovakia,,3 - 0
+42,Round of 16,26/06/2016 20:00,Stadium Municipal,Hungary,Belgium,,0 - 4
+43,Round of 16,27/06/2016 17:00,Stade de France,Italy,Spain,,2 - 0
+44,Round of 16,27/06/2016 20:00,Allianz Riviera,England,Iceland,,1 - 2
+45,Quarter Finals,30/06/2016 20:00,Stade Vélodrome,Poland,Portugal,,1 - 1
+46,Quarter Finals,01/07/2016 20:00,Stade Pierre-Mauroy,Wales,Belgium,,3 - 1
+47,Quarter Finals,02/07/2016 20:00,Nouveau Stade de Bordeaux,Germany,Italy,,1 - 1
+48,Quarter Finals,03/07/2016 20:00,Stade de France,France,Iceland,,5 - 2
+49,Semi Finals,06/07/2016 20:00,Parc Olympique Lyonnais,Portugal,Wales,,2 - 0
+50,Semi Finals,07/07/2016 20:00,Stade Vélodrome,Germany,France,,0 - 2
+51,Final,10/07/2016 20:00,Stade de France,Portugal,France,,1 - 0

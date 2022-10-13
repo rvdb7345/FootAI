@@ -1,0 +1,381 @@
+Match Number,Round Number,Date,Location,Home Team,Away Team,Result
+1,1,12/08/2022 19:00,Estadio El Sadar,CA Osasuna,Sevilla FC,2 - 1
+2,1,13/08/2022 15:00,Estadio ABANCA Balaídos,RC Celta,RCD Espanyol de Barcelona,2 - 2
+3,1,13/08/2022 17:00,Estadio Municipal José Zorrilla,Real Valladolid CF,Villarreal CF,0 - 3
+4,1,13/08/2022 19:00,Camp Nou,FC Barcelona,Rayo Vallecano,0 - 0
+5,1,14/08/2022 15:30,Estadio Nuevo Mirandilla,Cádiz CF,Real Sociedad,0 - 1
+6,1,14/08/2022 17:30,Camp de Mestalla,Valencia CF,Girona FC,1 - 0
+7,1,14/08/2022 20:00,Power Horse Stadium,UD Almería,Real Madrid,1 - 2
+8,1,15/08/2022 15:30,Estadio San Mamés,Athletic Club,RCD Mallorca,0 - 0
+9,1,15/08/2022 17:30,Coliseum Alfonso Pérez,Getafe CF,Atlético de Madrid,0 - 3
+10,1,15/08/2022 19:30,Estadio Benito Villamarín,Real Betis,Elche CF,3 - 0
+11,2,19/08/2022 18:00,RCDE Stadium,RCD Espanyol de Barcelona,Rayo Vallecano,0 - 2
+12,2,19/08/2022 20:00,Ramón Sánchez-Pizjuán,Sevilla FC,Real Valladolid CF,1 - 1
+13,2,20/08/2022 15:30,Estadio El Sadar,CA Osasuna,Cádiz CF,2 - 0
+14,2,20/08/2022 17:30,Visit Mallorca Estadi,RCD Mallorca,Real Betis,1 - 2
+15,2,20/08/2022 20:00,Estadio ABANCA Balaídos,RC Celta,Real Madrid,1 - 4
+16,2,21/08/2022 15:30,Estadio San Mamés,Athletic Club,Valencia CF,1 - 0
+17,2,21/08/2022 17:30,Metropolitano Stadium,Atlético de Madrid,Villarreal CF,0 - 2
+18,2,21/08/2022 20:00,Reale Arena,Real Sociedad,FC Barcelona,1 - 4
+19,2,22/08/2022 18:00,Estadio Martínez Valero,Elche CF,UD Almería,1 - 1
+20,2,22/08/2022 20:00,Estadio Municipal de Montilivi,Girona FC,Getafe CF,3 - 1
+21,3,26/08/2022 18:00,Estadio Municipal de Montilivi,Girona FC,RC Celta,0 - 1
+22,3,26/08/2022 20:00,Estadio Benito Villamarín,Real Betis,CA Osasuna,1 - 0
+23,3,27/08/2022 15:30,Estadio Martínez Valero,Elche CF,Real Sociedad,0 - 1
+24,3,27/08/2022 17:30,Estadio de Vallecas,Rayo Vallecano,RCD Mallorca,0 - 2
+25,3,27/08/2022 20:00,Power Horse Stadium,UD Almería,Sevilla FC,2 - 1
+26,3,28/08/2022 15:30,Coliseum Alfonso Pérez,Getafe CF,Villarreal CF,0 - 0
+27,3,28/08/2022 17:30,Camp Nou,FC Barcelona,Real Valladolid CF,4 - 0
+28,3,28/08/2022 20:00,RCDE Stadium,RCD Espanyol de Barcelona,Real Madrid,1 - 3
+29,3,29/08/2022 18:00,Estadio Nuevo Mirandilla,Cádiz CF,Athletic Club,0 - 4
+30,3,29/08/2022 20:00,Camp de Mestalla,Valencia CF,Atlético de Madrid,0 - 1
+38,4,02/09/2022 19:00,Estadio ABANCA Balaídos,RC Celta,Cádiz CF,3 - 0
+40,4,03/09/2022 12:00,Visit Mallorca Estadi,RCD Mallorca,Girona FC,1 - 1
+35,4,03/09/2022 14:15,Estadio Santiago Bernabéu,Real Madrid,Real Betis,2 - 1
+33,4,03/09/2022 16:30,Reale Arena,Real Sociedad,Atlético de Madrid,1 - 1
+34,4,03/09/2022 19:00,Ramón Sánchez-Pizjuán,Sevilla FC,FC Barcelona,0 - 3
+32,4,04/09/2022 12:00,Estadio El Sadar,CA Osasuna,Rayo Vallecano,2 - 1
+31,4,04/09/2022 14:15,Estadio San Mamés,Athletic Club,RCD Espanyol de Barcelona,0 - 1
+36,4,04/09/2022 16:30,Estadio Ciutat de València,Villarreal CF,Elche CF,4 - 0
+37,4,04/09/2022 19:00,Camp de Mestalla,Valencia CF,Getafe CF,5 - 1
+39,4,05/09/2022 19:00,Estadio Municipal José Zorrilla,Real Valladolid CF,UD Almería,1 - 0
+47,5,09/09/2022 19:00,Estadio Municipal de Montilivi,Girona FC,Real Valladolid CF,2 - 1
+45,5,10/09/2022 12:00,Estadio de Vallecas,Rayo Vallecano,Valencia CF,2 - 1
+44,5,10/09/2022 14:15,RCDE Stadium,RCD Espanyol de Barcelona,Sevilla FC,2 - 3
+49,5,10/09/2022 16:30,Estadio Nuevo Mirandilla,Cádiz CF,FC Barcelona,0 - 4
+41,5,10/09/2022 19:00,Metropolitano Stadium,Atlético de Madrid,RC Celta,4 - 1
+50,5,11/09/2022 12:00,Estadio Santiago Bernabéu,Real Madrid,RCD Mallorca,4 - 1
+48,5,11/09/2022 14:15,Estadio Martínez Valero,Elche CF,Athletic Club,1 - 4
+43,5,11/09/2022 16:30,Coliseum Alfonso Pérez,Getafe CF,Real Sociedad,2 - 1
+42,5,11/09/2022 19:00,Estadio Benito Villamarín,Real Betis,Villarreal CF,1 - 0
+46,5,12/09/2022 19:00,Power Horse Stadium,UD Almería,CA Osasuna,0 - 1
+57,6,16/09/2022 19:00,Estadio Municipal José Zorrilla,Real Valladolid CF,Cádiz CF,0 - 1
+60,6,17/09/2022 12:00,Visit Mallorca Estadi,RCD Mallorca,UD Almería,1 - 0
+53,6,17/09/2022 14:15,Camp Nou,FC Barcelona,Elche CF,3 - 0
+55,6,17/09/2022 14:15,Camp de Mestalla,Valencia CF,RC Celta,3 - 0
+51,6,17/09/2022 19:00,Estadio San Mamés,Athletic Club,Rayo Vallecano,3 - 2
+56,6,18/09/2022 12:00,Estadio El Sadar,CA Osasuna,Getafe CF,0 - 2
+59,6,18/09/2022 14:15,Estadio Ciutat de València,Villarreal CF,Sevilla FC,1 - 1
+54,6,18/09/2022 16:30,Estadio Benito Villamarín,Real Betis,Girona FC,2 - 1
+58,6,18/09/2022 16:30,Reale Arena,Real Sociedad,RCD Espanyol de Barcelona,2 - 1
+52,6,18/09/2022 19:00,Metropolitano Stadium,Atlético de Madrid,Real Madrid,1 - 2
+70,7,30/09/2022 19:00,Estadio San Mamés,Athletic Club,UD Almería,4 - 0
+62,7,01/10/2022 12:00,Estadio Nuevo Mirandilla,Cádiz CF,Villarreal CF,0 - 0
+61,7,01/10/2022 14:15,Coliseum Alfonso Pérez,Getafe CF,Real Valladolid CF,2 - 3
+65,7,01/10/2022 16:30,Ramón Sánchez-Pizjuán,Sevilla FC,Atlético de Madrid,0 - 2
+66,7,01/10/2022 19:00,Visit Mallorca Estadi,RCD Mallorca,FC Barcelona,0 - 1
+63,7,02/10/2022 12:00,RCDE Stadium,RCD Espanyol de Barcelona,Valencia CF,2 - 2
+67,7,02/10/2022 14:15,Estadio ABANCA Balaídos,RC Celta,Real Betis,1 - 0
+64,7,02/10/2022 16:30,Estadio Municipal de Montilivi,Girona FC,Real Sociedad,3 - 5
+69,7,02/10/2022 19:00,Estadio Santiago Bernabéu,Real Madrid,CA Osasuna,1 - 1
+68,7,03/10/2022 19:00,Estadio de Vallecas,Rayo Vallecano,Elche CF,2 - 1
+76,8,07/10/2022 19:00,Estadio El Sadar,CA Osasuna,Valencia CF,1 - 2
+78,8,08/10/2022 12:00,Power Horse Stadium,UD Almería,Rayo Vallecano,3 - 1
+71,8,08/10/2022 14:15,Metropolitano Stadium,Atlético de Madrid,Girona FC,2 - 1
+79,8,08/10/2022 16:30,Ramón Sánchez-Pizjuán,Sevilla FC,Athletic Club,1 - 1
+74,8,08/10/2022 19:00,Coliseum Alfonso Pérez,Getafe CF,Real Madrid,0 - 1
+80,8,09/10/2022 12:00,Estadio Municipal José Zorrilla,Real Valladolid CF,Real Betis,0 - 0
+75,8,09/10/2022 14:15,Estadio Nuevo Mirandilla,Cádiz CF,RCD Espanyol de Barcelona,2 - 2
+77,8,09/10/2022 16:30,Reale Arena,Real Sociedad,Villarreal CF,1 - 0
+72,8,09/10/2022 19:00,Camp Nou,FC Barcelona,RC Celta,1 - 0
+73,8,10/10/2022 19:00,Estadio Martínez Valero,Elche CF,RCD Mallorca,1 - 1
+87,9,14/10/2022 19:00,Estadio de Vallecas,Rayo Vallecano,Getafe CF,
+88,9,15/10/2022 12:00,Estadio Municipal de Montilivi,Girona FC,Cádiz CF,
+86,9,15/10/2022 14:15,Camp de Mestalla,Valencia CF,Elche CF,
+83,9,15/10/2022 16:30,Visit Mallorca Estadi,RCD Mallorca,Sevilla FC,
+81,9,15/10/2022 19:00,Estadio San Mamés,Athletic Club,Atlético de Madrid,
+82,9,16/10/2022 12:00,Estadio ABANCA Balaídos,RC Celta,Real Sociedad,
+85,9,16/10/2022 14:15,Estadio Santiago Bernabéu,Real Madrid,FC Barcelona,
+84,9,16/10/2022 16:30,RCDE Stadium,RCD Espanyol de Barcelona,Real Valladolid CF,
+90,9,16/10/2022 19:00,Estadio Benito Villamarín,Real Betis,UD Almería,
+89,9,17/10/2022 19:00,Estadio Ciutat de València,Villarreal CF,CA Osasuna,
+94,10,18/10/2022 17:00,Ramón Sánchez-Pizjuán,Sevilla FC,Valencia CF,
+96,10,18/10/2022 18:00,Coliseum Alfonso Pérez,Getafe CF,Athletic Club,
+91,10,18/10/2022 19:00,Metropolitano Stadium,Atlético de Madrid,Rayo Vallecano,
+97,10,19/10/2022 17:00,Estadio Nuevo Mirandilla,Cádiz CF,Real Betis,
+98,10,19/10/2022 17:00,Estadio Municipal José Zorrilla,Real Valladolid CF,RC Celta,
+99,10,19/10/2022 18:00,Reale Arena,Real Sociedad,RCD Mallorca,
+93,10,19/10/2022 19:00,Estadio Martínez Valero,Elche CF,Real Madrid,
+95,10,20/10/2022 17:00,Power Horse Stadium,UD Almería,Girona FC,
+100,10,20/10/2022 18:00,Estadio El Sadar,CA Osasuna,RCD Espanyol de Barcelona,
+92,10,20/10/2022 19:00,Camp Nou,FC Barcelona,Villarreal CF,
+108,11,22/10/2022 12:00,Estadio de Vallecas,Rayo Vallecano,Cádiz CF,
+109,11,22/10/2022 14:15,Estadio Municipal José Zorrilla,Real Valladolid CF,Real Sociedad,
+107,11,22/10/2022 16:30,Camp de Mestalla,Valencia CF,RCD Mallorca,
+102,11,22/10/2022 19:00,Estadio Santiago Bernabéu,Real Madrid,Sevilla FC,
+106,11,23/10/2022 12:00,RCDE Stadium,RCD Espanyol de Barcelona,Elche CF,
+105,11,23/10/2022 14:15,Estadio Benito Villamarín,Real Betis,Atlético de Madrid,
+103,11,23/10/2022 16:30,Estadio Municipal de Montilivi,Girona FC,CA Osasuna,
+110,11,23/10/2022 16:30,Estadio Ciutat de València,Villarreal CF,UD Almería,
+104,11,23/10/2022 19:00,Camp Nou,FC Barcelona,Athletic Club,
+101,11,24/10/2022 19:00,Estadio ABANCA Balaídos,RC Celta,Getafe CF,
+111,12,30/10/2022 20:00,Estadio San Mamés,Athletic Club,Villarreal CF,
+112,12,30/10/2022 20:00,Estadio Martínez Valero,Elche CF,Getafe CF,
+113,12,30/10/2022 20:00,Estadio El Sadar,CA Osasuna,Real Valladolid CF,
+114,12,30/10/2022 20:00,Power Horse Stadium,UD Almería,RC Celta,
+115,12,30/10/2022 20:00,Estadio Nuevo Mirandilla,Cádiz CF,Atlético de Madrid,
+116,12,30/10/2022 20:00,Camp de Mestalla,Valencia CF,FC Barcelona,
+117,12,30/10/2022 20:00,Reale Arena,Real Sociedad,Real Betis,
+118,12,30/10/2022 20:00,Visit Mallorca Estadi,RCD Mallorca,RCD Espanyol de Barcelona,
+119,12,30/10/2022 20:00,Ramón Sánchez-Pizjuán,Sevilla FC,Rayo Vallecano,
+120,12,30/10/2022 20:00,Estadio Santiago Bernabéu,Real Madrid,Girona FC,
+121,13,06/11/2022 20:00,Metropolitano Stadium,Atlético de Madrid,RCD Espanyol de Barcelona,
+122,13,06/11/2022 20:00,Estadio Benito Villamarín,Real Betis,Sevilla FC,
+123,13,06/11/2022 20:00,Estadio ABANCA Balaídos,RC Celta,CA Osasuna,
+124,13,06/11/2022 20:00,Reale Arena,Real Sociedad,Valencia CF,
+125,13,06/11/2022 20:00,Estadio de Vallecas,Rayo Vallecano,Real Madrid,
+126,13,06/11/2022 20:00,Estadio Municipal de Montilivi,Girona FC,Athletic Club,
+127,13,06/11/2022 20:00,Estadio Municipal José Zorrilla,Real Valladolid CF,Elche CF,
+128,13,06/11/2022 20:00,Estadio Ciutat de València,Villarreal CF,RCD Mallorca,
+129,13,06/11/2022 20:00,Coliseum Alfonso Pérez,Getafe CF,Cádiz CF,
+130,13,06/11/2022 20:00,Camp Nou,FC Barcelona,UD Almería,
+131,14,09/11/2022 20:00,Estadio San Mamés,Athletic Club,Real Valladolid CF,
+132,14,09/11/2022 20:00,Estadio Martínez Valero,Elche CF,Girona FC,
+133,14,09/11/2022 20:00,RCDE Stadium,RCD Espanyol de Barcelona,Villarreal CF,
+134,14,09/11/2022 20:00,Power Horse Stadium,UD Almería,Getafe CF,
+135,14,09/11/2022 20:00,Visit Mallorca Estadi,RCD Mallorca,Atlético de Madrid,
+136,14,09/11/2022 20:00,Estadio El Sadar,CA Osasuna,FC Barcelona,
+137,14,09/11/2022 20:00,Camp de Mestalla,Valencia CF,Real Betis,
+138,14,09/11/2022 20:00,Estadio de Vallecas,Rayo Vallecano,RC Celta,
+139,14,09/11/2022 20:00,Estadio Santiago Bernabéu,Real Madrid,Cádiz CF,
+140,14,09/11/2022 20:00,Ramón Sánchez-Pizjuán,Sevilla FC,Real Sociedad,
+141,15,31/12/2022 20:00,Metropolitano Stadium,Atlético de Madrid,Elche CF,
+142,15,31/12/2022 20:00,Camp Nou,FC Barcelona,RCD Espanyol de Barcelona,
+143,15,31/12/2022 20:00,Estadio ABANCA Balaídos,RC Celta,Sevilla FC,
+144,15,31/12/2022 20:00,Coliseum Alfonso Pérez,Getafe CF,RCD Mallorca,
+145,15,31/12/2022 20:00,Estadio Municipal de Montilivi,Girona FC,Rayo Vallecano,
+146,15,31/12/2022 20:00,Estadio Benito Villamarín,Real Betis,Athletic Club,
+147,15,31/12/2022 20:00,Reale Arena,Real Sociedad,CA Osasuna,
+148,15,31/12/2022 20:00,Estadio Municipal José Zorrilla,Real Valladolid CF,Real Madrid,
+149,15,31/12/2022 20:00,Estadio Ciutat de València,Villarreal CF,Valencia CF,
+150,15,31/12/2022 20:00,Estadio Nuevo Mirandilla,Cádiz CF,UD Almería,
+151,16,08/01/2023 20:00,Estadio San Mamés,Athletic Club,CA Osasuna,
+152,16,08/01/2023 20:00,Metropolitano Stadium,Atlético de Madrid,FC Barcelona,
+153,16,08/01/2023 20:00,Visit Mallorca Estadi,RCD Mallorca,Real Valladolid CF,
+154,16,08/01/2023 20:00,RCDE Stadium,RCD Espanyol de Barcelona,Girona FC,
+155,16,08/01/2023 20:00,Power Horse Stadium,UD Almería,Real Sociedad,
+156,16,08/01/2023 20:00,Estadio de Vallecas,Rayo Vallecano,Real Betis,
+157,16,08/01/2023 20:00,Estadio Martínez Valero,Elche CF,RC Celta,
+158,16,08/01/2023 20:00,Ramón Sánchez-Pizjuán,Sevilla FC,Getafe CF,
+159,16,08/01/2023 20:00,Camp de Mestalla,Valencia CF,Cádiz CF,
+160,16,08/01/2023 20:00,Estadio de la Cerámica,Villarreal CF,Real Madrid,
+161,17,15/01/2023 20:00,Estadio ABANCA Balaídos,RC Celta,Villarreal CF,
+162,17,15/01/2023 20:00,Estadio Nuevo Mirandilla,Cádiz CF,Elche CF,
+163,17,15/01/2023 20:00,Estadio Santiago Bernabéu,Real Madrid,Valencia CF,
+164,17,15/01/2023 20:00,Power Horse Stadium,UD Almería,Atlético de Madrid,
+165,17,15/01/2023 20:00,Estadio Municipal de Montilivi,Girona FC,Sevilla FC,
+166,17,15/01/2023 20:00,Reale Arena,Real Sociedad,Athletic Club,
+167,17,15/01/2023 20:00,Estadio Benito Villamarín,Real Betis,FC Barcelona,
+168,17,15/01/2023 20:00,Estadio El Sadar,CA Osasuna,RCD Mallorca,
+169,17,15/01/2023 20:00,Coliseum Alfonso Pérez,Getafe CF,RCD Espanyol de Barcelona,
+170,17,15/01/2023 20:00,Estadio Municipal José Zorrilla,Real Valladolid CF,Rayo Vallecano,
+171,18,22/01/2023 20:00,Estadio San Mamés,Athletic Club,Real Madrid,
+172,18,22/01/2023 20:00,Metropolitano Stadium,Atlético de Madrid,Real Valladolid CF,
+173,18,22/01/2023 20:00,Camp Nou,FC Barcelona,Getafe CF,
+174,18,22/01/2023 20:00,Estadio Martínez Valero,Elche CF,CA Osasuna,
+175,18,22/01/2023 20:00,Estadio de Vallecas,Rayo Vallecano,Real Sociedad,
+176,18,22/01/2023 20:00,RCDE Stadium,RCD Espanyol de Barcelona,Real Betis,
+177,18,22/01/2023 20:00,Visit Mallorca Estadi,RCD Mallorca,RC Celta,
+178,18,22/01/2023 20:00,Ramón Sánchez-Pizjuán,Sevilla FC,Cádiz CF,
+179,18,22/01/2023 20:00,Camp de Mestalla,Valencia CF,UD Almería,
+180,18,22/01/2023 20:00,Estadio de la Cerámica,Villarreal CF,Girona FC,
+181,19,29/01/2023 20:00,Estadio Nuevo Mirandilla,Cádiz CF,RCD Mallorca,
+182,19,29/01/2023 20:00,Estadio Santiago Bernabéu,Real Madrid,Real Sociedad,
+183,19,29/01/2023 20:00,Power Horse Stadium,UD Almería,RCD Espanyol de Barcelona,
+184,19,29/01/2023 20:00,Estadio ABANCA Balaídos,RC Celta,Athletic Club,
+185,19,29/01/2023 20:00,Estadio El Sadar,CA Osasuna,Atlético de Madrid,
+186,19,29/01/2023 20:00,Estadio Municipal de Montilivi,Girona FC,FC Barcelona,
+187,19,29/01/2023 20:00,Coliseum Alfonso Pérez,Getafe CF,Real Betis,
+188,19,29/01/2023 20:00,Ramón Sánchez-Pizjuán,Sevilla FC,Elche CF,
+189,19,29/01/2023 20:00,Estadio Municipal José Zorrilla,Real Valladolid CF,Valencia CF,
+190,19,29/01/2023 20:00,Estadio de la Cerámica,Villarreal CF,Rayo Vallecano,
+191,20,05/02/2023 20:00,Estadio San Mamés,Athletic Club,Cádiz CF,
+192,20,05/02/2023 20:00,Metropolitano Stadium,Atlético de Madrid,Getafe CF,
+193,20,05/02/2023 20:00,Camp Nou,FC Barcelona,Sevilla FC,
+194,20,05/02/2023 20:00,Estadio Benito Villamarín,Real Betis,RC Celta,
+195,20,05/02/2023 20:00,Estadio Martínez Valero,Elche CF,Villarreal CF,
+196,20,05/02/2023 20:00,Visit Mallorca Estadi,RCD Mallorca,Real Madrid,
+197,20,05/02/2023 20:00,RCDE Stadium,RCD Espanyol de Barcelona,CA Osasuna,
+198,20,05/02/2023 20:00,Reale Arena,Real Sociedad,Real Valladolid CF,
+199,20,05/02/2023 20:00,Estadio Municipal de Montilivi,Girona FC,Valencia CF,
+200,20,05/02/2023 20:00,Estadio de Vallecas,Rayo Vallecano,UD Almería,
+201,21,12/02/2023 20:00,Coliseum Alfonso Pérez,Getafe CF,Rayo Vallecano,
+202,21,12/02/2023 20:00,Estadio Nuevo Mirandilla,Cádiz CF,Girona FC,
+203,21,12/02/2023 20:00,RCDE Stadium,RCD Espanyol de Barcelona,Real Sociedad,
+204,21,12/02/2023 20:00,Power Horse Stadium,UD Almería,Real Betis,
+205,21,12/02/2023 20:00,Camp de Mestalla,Valencia CF,Athletic Club,
+206,21,12/02/2023 20:00,Estadio ABANCA Balaídos,RC Celta,Atlético de Madrid,
+207,21,12/02/2023 20:00,Estadio de la Cerámica,Villarreal CF,FC Barcelona,
+208,21,12/02/2023 20:00,Estadio Santiago Bernabéu,Real Madrid,Elche CF,
+209,21,12/02/2023 20:00,Ramón Sánchez-Pizjuán,Sevilla FC,RCD Mallorca,
+210,21,12/02/2023 20:00,Estadio Municipal José Zorrilla,Real Valladolid CF,CA Osasuna,
+211,22,19/02/2023 20:00,Camp Nou,FC Barcelona,Cádiz CF,
+212,22,19/02/2023 20:00,Estadio Benito Villamarín,Real Betis,Real Valladolid CF,
+213,22,19/02/2023 20:00,Estadio Martínez Valero,Elche CF,RCD Espanyol de Barcelona,
+214,22,19/02/2023 20:00,Visit Mallorca Estadi,RCD Mallorca,Villarreal CF,
+215,22,19/02/2023 20:00,Coliseum Alfonso Pérez,Getafe CF,Valencia CF,
+216,22,19/02/2023 20:00,Estadio El Sadar,CA Osasuna,Real Madrid,
+217,22,19/02/2023 20:00,Estadio de Vallecas,Rayo Vallecano,Sevilla FC,
+218,22,19/02/2023 20:00,Metropolitano Stadium,Atlético de Madrid,Athletic Club,
+219,22,19/02/2023 20:00,Reale Arena,Real Sociedad,RC Celta,
+220,22,19/02/2023 20:00,Estadio Municipal de Montilivi,Girona FC,UD Almería,
+221,23,26/02/2023 20:00,Estadio San Mamés,Athletic Club,Girona FC,
+222,23,26/02/2023 20:00,Estadio ABANCA Balaídos,RC Celta,Real Valladolid CF,
+223,23,26/02/2023 20:00,Estadio Nuevo Mirandilla,Cádiz CF,Rayo Vallecano,
+224,23,26/02/2023 20:00,RCDE Stadium,RCD Espanyol de Barcelona,RCD Mallorca,
+225,23,26/02/2023 20:00,Power Horse Stadium,UD Almería,FC Barcelona,
+226,23,26/02/2023 20:00,Estadio Santiago Bernabéu,Real Madrid,Atlético de Madrid,
+227,23,26/02/2023 20:00,Estadio Martínez Valero,Elche CF,Real Betis,
+228,23,26/02/2023 20:00,Estadio de la Cerámica,Villarreal CF,Getafe CF,
+229,23,26/02/2023 20:00,Ramón Sánchez-Pizjuán,Sevilla FC,CA Osasuna,
+230,23,26/02/2023 20:00,Camp de Mestalla,Valencia CF,Real Sociedad,
+231,24,05/03/2023 20:00,Metropolitano Stadium,Atlético de Madrid,Sevilla FC,
+232,24,05/03/2023 20:00,Camp Nou,FC Barcelona,Valencia CF,
+233,24,05/03/2023 20:00,Estadio Benito Villamarín,Real Betis,Real Madrid,
+234,24,05/03/2023 20:00,Coliseum Alfonso Pérez,Getafe CF,Girona FC,
+235,24,05/03/2023 20:00,Power Horse Stadium,UD Almería,Villarreal CF,
+236,24,05/03/2023 20:00,Estadio de Vallecas,Rayo Vallecano,Athletic Club,
+237,24,05/03/2023 20:00,Estadio El Sadar,CA Osasuna,RC Celta,
+238,24,05/03/2023 20:00,Visit Mallorca Estadi,RCD Mallorca,Elche CF,
+239,24,05/03/2023 20:00,Reale Arena,Real Sociedad,Cádiz CF,
+240,24,05/03/2023 20:00,Estadio Municipal José Zorrilla,Real Valladolid CF,RCD Espanyol de Barcelona,
+241,25,12/03/2023 20:00,Estadio San Mamés,Athletic Club,FC Barcelona,
+242,25,12/03/2023 20:00,Estadio ABANCA Balaídos,RC Celta,Rayo Vallecano,
+243,25,12/03/2023 20:00,Estadio Martínez Valero,Elche CF,Real Valladolid CF,
+244,25,12/03/2023 20:00,Visit Mallorca Estadi,RCD Mallorca,Real Sociedad,
+245,25,12/03/2023 20:00,Estadio Nuevo Mirandilla,Cádiz CF,Getafe CF,
+246,25,12/03/2023 20:00,Estadio Municipal de Montilivi,Girona FC,Atlético de Madrid,
+247,25,12/03/2023 20:00,Estadio de la Cerámica,Villarreal CF,Real Betis,
+248,25,12/03/2023 20:00,Estadio Santiago Bernabéu,Real Madrid,RCD Espanyol de Barcelona,
+249,25,12/03/2023 20:00,Camp de Mestalla,Valencia CF,CA Osasuna,
+250,25,12/03/2023 20:00,Ramón Sánchez-Pizjuán,Sevilla FC,UD Almería,
+251,26,19/03/2023 20:00,Metropolitano Stadium,Atlético de Madrid,Valencia CF,
+252,26,19/03/2023 20:00,Camp Nou,FC Barcelona,Real Madrid,
+253,26,19/03/2023 20:00,Estadio Benito Villamarín,Real Betis,RCD Mallorca,
+254,26,19/03/2023 20:00,Coliseum Alfonso Pérez,Getafe CF,Sevilla FC,
+255,26,19/03/2023 20:00,Estadio El Sadar,CA Osasuna,Villarreal CF,
+256,26,19/03/2023 20:00,Power Horse Stadium,UD Almería,Cádiz CF,
+257,26,19/03/2023 20:00,Estadio Municipal José Zorrilla,Real Valladolid CF,Athletic Club,
+258,26,19/03/2023 20:00,RCDE Stadium,RCD Espanyol de Barcelona,RC Celta,
+259,26,19/03/2023 20:00,Reale Arena,Real Sociedad,Elche CF,
+260,26,19/03/2023 20:00,Estadio de Vallecas,Rayo Vallecano,Girona FC,
+261,27,02/04/2023 19:00,Estadio San Mamés,Athletic Club,Getafe CF,
+262,27,02/04/2023 19:00,Metropolitano Stadium,Atlético de Madrid,Real Betis,
+263,27,02/04/2023 19:00,Visit Mallorca Estadi,RCD Mallorca,CA Osasuna,
+264,27,02/04/2023 19:00,Estadio Nuevo Mirandilla,Cádiz CF,Sevilla FC,
+265,27,02/04/2023 19:00,Estadio Santiago Bernabéu,Real Madrid,Real Valladolid CF,
+266,27,02/04/2023 19:00,Estadio Martínez Valero,Elche CF,FC Barcelona,
+267,27,02/04/2023 19:00,Estadio Municipal de Montilivi,Girona FC,RCD Espanyol de Barcelona,
+268,27,02/04/2023 19:00,Estadio de la Cerámica,Villarreal CF,Real Sociedad,
+269,27,02/04/2023 19:00,Camp de Mestalla,Valencia CF,Rayo Vallecano,
+270,27,02/04/2023 19:00,Estadio ABANCA Balaídos,RC Celta,UD Almería,
+271,28,09/04/2023 19:00,Camp Nou,FC Barcelona,Girona FC,
+272,28,09/04/2023 19:00,Estadio Benito Villamarín,Real Betis,Cádiz CF,
+273,28,09/04/2023 19:00,Estadio Santiago Bernabéu,Real Madrid,Villarreal CF,
+274,28,09/04/2023 19:00,Power Horse Stadium,UD Almería,Valencia CF,
+275,28,09/04/2023 19:00,RCDE Stadium,RCD Espanyol de Barcelona,Athletic Club,
+276,28,09/04/2023 19:00,Estadio de Vallecas,Rayo Vallecano,Atlético de Madrid,
+277,28,09/04/2023 19:00,Ramón Sánchez-Pizjuán,Sevilla FC,RC Celta,
+278,28,09/04/2023 19:00,Estadio El Sadar,CA Osasuna,Elche CF,
+279,28,09/04/2023 19:00,Estadio Municipal José Zorrilla,Real Valladolid CF,RCD Mallorca,
+280,28,09/04/2023 19:00,Reale Arena,Real Sociedad,Getafe CF,
+281,29,16/04/2023 19:00,Estadio San Mamés,Athletic Club,Real Sociedad,
+282,29,16/04/2023 19:00,Estadio Benito Villamarín,Real Betis,RCD Espanyol de Barcelona,
+283,29,16/04/2023 19:00,Estadio ABANCA Balaídos,RC Celta,RCD Mallorca,
+284,29,16/04/2023 19:00,Estadio Nuevo Mirandilla,Cádiz CF,Real Madrid,
+285,29,16/04/2023 19:00,Estadio de la Cerámica,Villarreal CF,Real Valladolid CF,
+286,29,16/04/2023 19:00,Coliseum Alfonso Pérez,Getafe CF,FC Barcelona,
+287,29,16/04/2023 19:00,Estadio Municipal de Montilivi,Girona FC,Elche CF,
+288,29,16/04/2023 19:00,Estadio de Vallecas,Rayo Vallecano,CA Osasuna,
+289,29,16/04/2023 19:00,Camp de Mestalla,Valencia CF,Sevilla FC,
+290,29,16/04/2023 19:00,Metropolitano Stadium,Atlético de Madrid,UD Almería,
+291,30,23/04/2023 19:00,Estadio Martínez Valero,Elche CF,Valencia CF,
+292,30,23/04/2023 19:00,Ramón Sánchez-Pizjuán,Sevilla FC,Villarreal CF,
+293,30,23/04/2023 19:00,Power Horse Stadium,UD Almería,Athletic Club,
+294,30,23/04/2023 19:00,Camp Nou,FC Barcelona,Atlético de Madrid,
+295,30,23/04/2023 19:00,Estadio El Sadar,CA Osasuna,Real Betis,
+296,30,23/04/2023 19:00,Estadio Santiago Bernabéu,Real Madrid,RC Celta,
+297,30,23/04/2023 19:00,Visit Mallorca Estadi,RCD Mallorca,Getafe CF,
+298,30,23/04/2023 19:00,RCDE Stadium,RCD Espanyol de Barcelona,Cádiz CF,
+299,30,23/04/2023 19:00,Reale Arena,Real Sociedad,Rayo Vallecano,
+300,30,23/04/2023 19:00,Estadio Municipal José Zorrilla,Real Valladolid CF,Girona FC,
+301,31,26/04/2023 19:00,Estadio San Mamés,Athletic Club,Sevilla FC,
+302,31,26/04/2023 19:00,Metropolitano Stadium,Atlético de Madrid,RCD Mallorca,
+303,31,26/04/2023 19:00,Estadio Benito Villamarín,Real Betis,Real Sociedad,
+304,31,26/04/2023 19:00,Estadio ABANCA Balaídos,RC Celta,Elche CF,
+305,31,26/04/2023 19:00,Estadio Nuevo Mirandilla,Cádiz CF,CA Osasuna,
+306,31,26/04/2023 19:00,Camp de Mestalla,Valencia CF,Real Valladolid CF,
+307,31,26/04/2023 19:00,Estadio Municipal de Montilivi,Girona FC,Real Madrid,
+308,31,26/04/2023 19:00,Estadio de Vallecas,Rayo Vallecano,FC Barcelona,
+309,31,26/04/2023 19:00,Estadio de la Cerámica,Villarreal CF,RCD Espanyol de Barcelona,
+310,31,26/04/2023 19:00,Coliseum Alfonso Pérez,Getafe CF,UD Almería,
+311,32,30/04/2023 19:00,Camp Nou,FC Barcelona,Real Betis,
+312,32,30/04/2023 19:00,Estadio Martínez Valero,Elche CF,Rayo Vallecano,
+313,32,30/04/2023 19:00,Estadio Nuevo Mirandilla,Cádiz CF,Valencia CF,
+314,32,30/04/2023 19:00,RCDE Stadium,RCD Espanyol de Barcelona,Getafe CF,
+315,32,30/04/2023 19:00,Estadio El Sadar,CA Osasuna,Real Sociedad,
+316,32,30/04/2023 19:00,Visit Mallorca Estadi,RCD Mallorca,Athletic Club,
+317,32,30/04/2023 19:00,Estadio Municipal José Zorrilla,Real Valladolid CF,Atlético de Madrid,
+318,32,30/04/2023 19:00,Estadio de la Cerámica,Villarreal CF,RC Celta,
+319,32,30/04/2023 19:00,Estadio Santiago Bernabéu,Real Madrid,UD Almería,
+320,32,30/04/2023 19:00,Ramón Sánchez-Pizjuán,Sevilla FC,Girona FC,
+321,33,03/05/2023 19:00,Estadio San Mamés,Athletic Club,Real Betis,
+322,33,03/05/2023 19:00,Metropolitano Stadium,Atlético de Madrid,Cádiz CF,
+323,33,03/05/2023 19:00,Camp Nou,FC Barcelona,CA Osasuna,
+324,33,03/05/2023 19:00,Camp de Mestalla,Valencia CF,Villarreal CF,
+325,33,03/05/2023 19:00,Estadio de Vallecas,Rayo Vallecano,Real Valladolid CF,
+326,33,03/05/2023 19:00,Power Horse Stadium,UD Almería,Elche CF,
+327,33,03/05/2023 19:00,Estadio Municipal de Montilivi,Girona FC,RCD Mallorca,
+328,33,03/05/2023 19:00,Coliseum Alfonso Pérez,Getafe CF,RC Celta,
+329,33,03/05/2023 19:00,Ramón Sánchez-Pizjuán,Sevilla FC,RCD Espanyol de Barcelona,
+330,33,03/05/2023 19:00,Reale Arena,Real Sociedad,Real Madrid,
+331,34,14/05/2023 19:00,Estadio Benito Villamarín,Real Betis,Rayo Vallecano,
+332,34,14/05/2023 19:00,Estadio ABANCA Balaídos,RC Celta,Valencia CF,
+333,34,14/05/2023 19:00,Estadio de la Cerámica,Villarreal CF,Athletic Club,
+334,34,14/05/2023 19:00,Estadio Martínez Valero,Elche CF,Atlético de Madrid,
+335,34,14/05/2023 19:00,RCDE Stadium,RCD Espanyol de Barcelona,FC Barcelona,
+336,34,14/05/2023 19:00,Estadio Santiago Bernabéu,Real Madrid,Getafe CF,
+337,34,14/05/2023 19:00,Visit Mallorca Estadi,RCD Mallorca,Cádiz CF,
+338,34,14/05/2023 19:00,Estadio Municipal José Zorrilla,Real Valladolid CF,Sevilla FC,
+339,34,14/05/2023 19:00,Estadio El Sadar,CA Osasuna,UD Almería,
+340,34,14/05/2023 19:00,Reale Arena,Real Sociedad,Girona FC,
+341,35,21/05/2023 19:00,Estadio San Mamés,Athletic Club,RC Celta,
+342,35,21/05/2023 19:00,Metropolitano Stadium,Atlético de Madrid,CA Osasuna,
+343,35,21/05/2023 19:00,Camp Nou,FC Barcelona,Real Sociedad,
+344,35,21/05/2023 19:00,Estadio Nuevo Mirandilla,Cádiz CF,Real Valladolid CF,
+345,35,21/05/2023 19:00,Power Horse Stadium,UD Almería,RCD Mallorca,
+346,35,21/05/2023 19:00,Estadio Municipal de Montilivi,Girona FC,Villarreal CF,
+347,35,21/05/2023 19:00,Ramón Sánchez-Pizjuán,Sevilla FC,Real Betis,
+348,35,21/05/2023 19:00,Coliseum Alfonso Pérez,Getafe CF,Elche CF,
+349,35,21/05/2023 19:00,Estadio de Vallecas,Rayo Vallecano,RCD Espanyol de Barcelona,
+350,35,21/05/2023 19:00,Camp de Mestalla,Valencia CF,Real Madrid,
+351,36,24/05/2023 19:00,Estadio Benito Villamarín,Real Betis,Getafe CF,
+352,36,24/05/2023 19:00,Estadio ABANCA Balaídos,RC Celta,Girona FC,
+353,36,24/05/2023 19:00,Estadio Martínez Valero,Elche CF,Sevilla FC,
+354,36,24/05/2023 19:00,Visit Mallorca Estadi,RCD Mallorca,Valencia CF,
+355,36,24/05/2023 19:00,Estadio El Sadar,CA Osasuna,Athletic Club,
+356,36,24/05/2023 19:00,RCDE Stadium,RCD Espanyol de Barcelona,Atlético de Madrid,
+357,36,24/05/2023 19:00,Estadio Municipal José Zorrilla,Real Valladolid CF,FC Barcelona,
+358,36,24/05/2023 19:00,Estadio de la Cerámica,Villarreal CF,Cádiz CF,
+359,36,24/05/2023 19:00,Estadio Santiago Bernabéu,Real Madrid,Rayo Vallecano,
+360,36,24/05/2023 19:00,Reale Arena,Real Sociedad,UD Almería,
+361,37,28/05/2023 19:00,Estadio San Mamés,Athletic Club,Elche CF,
+362,37,28/05/2023 19:00,Metropolitano Stadium,Atlético de Madrid,Real Sociedad,
+363,37,28/05/2023 19:00,Camp Nou,FC Barcelona,RCD Mallorca,
+364,37,28/05/2023 19:00,Coliseum Alfonso Pérez,Getafe CF,CA Osasuna,
+365,37,28/05/2023 19:00,Estadio Nuevo Mirandilla,Cádiz CF,RC Celta,
+366,37,28/05/2023 19:00,Estadio de Vallecas,Rayo Vallecano,Villarreal CF,
+367,37,28/05/2023 19:00,Power Horse Stadium,UD Almería,Real Valladolid CF,
+368,37,28/05/2023 19:00,Estadio Municipal de Montilivi,Girona FC,Real Betis,
+369,37,28/05/2023 19:00,Camp de Mestalla,Valencia CF,RCD Espanyol de Barcelona,
+370,37,28/05/2023 19:00,Ramón Sánchez-Pizjuán,Sevilla FC,Real Madrid,
+371,38,04/06/2023 19:00,Estadio Benito Villamarín,Real Betis,Valencia CF,
+372,38,04/06/2023 19:00,Visit Mallorca Estadi,RCD Mallorca,Rayo Vallecano,
+373,38,04/06/2023 19:00,Reale Arena,Real Sociedad,Sevilla FC,
+374,38,04/06/2023 19:00,Estadio Santiago Bernabéu,Real Madrid,Athletic Club,
+375,38,04/06/2023 19:00,Estadio de la Cerámica,Villarreal CF,Atlético de Madrid,
+376,38,04/06/2023 19:00,Estadio ABANCA Balaídos,RC Celta,FC Barcelona,
+377,38,04/06/2023 19:00,Estadio Municipal José Zorrilla,Real Valladolid CF,Getafe CF,
+378,38,04/06/2023 19:00,Estadio Martínez Valero,Elche CF,Cádiz CF,
+379,38,04/06/2023 19:00,RCDE Stadium,RCD Espanyol de Barcelona,UD Almería,
+380,38,04/06/2023 19:00,Estadio El Sadar,CA Osasuna,Girona FC,
