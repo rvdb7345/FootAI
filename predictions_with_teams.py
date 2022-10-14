@@ -26,7 +26,7 @@ pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 np.set_printoptions(threshold=sys.maxsize)
 
-player_df = pd.read_csv('players_21.csv')
+player_df = pd.read_csv('fifa_player_data/players_21.csv')
 match_df = pd.read_csv('uefa-euro-2020-CentralEuropeStandardTime.csv')
 qualification_rounds_2020 = pd.read_csv('international-uefa-euro-qualifiers-matches-2019-to-2020-stats.csv')
 country_rankings = pd.read_csv('fifa_ranking-2021-05-27.csv')
@@ -34,9 +34,11 @@ qualification_rounds = pd.read_csv('international-uefa-euro-qualifiers-matches-2
 # qualification_rounds_2016 = pd.read_csv('international-uefa-euro-qualifiers-matches-2016-to-2016-stats.csv')
 # qualification_rounds = pd.concat((qualification_rounds_2016, qualification_rounds_2020))
 
-historic_player_df = pd.concat((pd.read_csv('players_20.csv'), pd.read_csv('players_19.csv'), pd.read_csv(
-    'players_18.csv'), pd.read_csv('players_17.csv'), pd.read_csv('players_16.csv'), pd.read_csv(
-    'players_15.csv'))).drop_duplicates(subset=['long_name'])
+historic_player_df = pd.concat((pd.read_csv('fifa_player_data/players_20.csv'), pd.read_csv(
+    'fifa_player_data/players_19.csv'), pd.read_csv(
+    'fifa_player_data/players_18.csv'), pd.read_csv('fifa_player_data/players_17.csv'), pd.read_csv(
+    'fifa_player_data/players_16.csv'), pd.read_csv(
+    'fifa_player_data/players_15.csv'))).drop_duplicates(subset=['long_name'])
 
 played_matches = match_df.dropna(subset=['Result'])
 
