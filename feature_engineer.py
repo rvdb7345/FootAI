@@ -149,8 +149,19 @@ if __name__ == '__main__':
             fixture_overview_df.loc[idx, 'total_home_team_potential'] = best_home_team['potential'].sum()
             fixture_overview_df.loc[idx, 'total_away_team_potential'] = best_away_team['potential'].sum()
 
+            fixture_overview_df.loc[idx, 'total_home_team_overall'] = best_home_team['overall'].sum()
+            fixture_overview_df.loc[idx, 'total_away_team_overall'] = best_away_team['overall'].sum()
+
+            fixture_overview_df.loc[idx, 'total_home_team_work_rate'] = best_home_team['work_rate'].sum()
+            fixture_overview_df.loc[idx, 'total_away_team_work_rate'] = best_away_team['work_rate'].sum()
+
+            fixture_overview_df.loc[idx, 'total_home_team_international_reputation'] = best_home_team['international_reputation'].sum()
+            fixture_overview_df.loc[idx, 'total_away_team_international_reputation'] = best_away_team['international_reputation'].sum()
+
     print(f'Team found for {len(composed_teams) / len(fixture_overview_df["HomeTeam"].unique())*100}% of the teams')
     print(f'Uncomposed teams: {set(uncomposed_teams)}')
+
+    fixture_overview_df.dropna(subset=['total_home_team_price', 'total_away_team_price'], inplace=True)
 
     fixture_overview_df.to_csv('prepped_data_set.csv')
 
