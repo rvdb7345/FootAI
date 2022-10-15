@@ -12,9 +12,16 @@ def load_players_per_team(team, player_list, national):
 
 def generate_fictive_team_from_players(players):
     """We don't know how the teams were composed at the time of playing, therefore, we make a fictive team out of the
-    potential players we have."""
+    potential players we have.
+
+    This function could help
+    https://www.kaggle.com/code/stefanoleone992/fifa-22-players-lineup-visualization-and-more
+    """
 
     return
+
+
+
 
 
 if __name__ == '__main__':
