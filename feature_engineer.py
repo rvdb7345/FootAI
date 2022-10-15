@@ -107,6 +107,19 @@ if __name__ == '__main__':
     fixture_overview_df = pd.read_csv('prepped_data_sources/prepped_fixture_overview.csv')
     player_22_df = pd.read_csv('fifa_player_data/players_22.csv')
 
+    # player_22_df.iloc[:, 0:10].info()
+    # player_22_df.iloc[:, 10:20].info()
+    # player_22_df.iloc[:, 20:30].info()
+    # player_22_df.iloc[:, 30:40].info()
+    # player_22_df.iloc[:, 40:50].info()
+    # player_22_df.iloc[:, 50:60].info()
+    # player_22_df.iloc[:, 60:70].info()
+    # player_22_df.iloc[:, 70:80].info()
+    # player_22_df.iloc[:, 80:90].info()
+    # player_22_df.iloc[:, 90:100].info()
+    #
+    # assert False
+
     # initiate feature columns
     fixture_overview_df['total_home_team_price'] = 0
     fixture_overview_df['total_away_team_price'] = 0
@@ -158,10 +171,19 @@ if __name__ == '__main__':
             fixture_overview_df.loc[idx, 'total_home_team_international_reputation'] = best_home_team['international_reputation'].sum()
             fixture_overview_df.loc[idx, 'total_away_team_international_reputation'] = best_away_team['international_reputation'].sum()
 
+            fixture_overview_df.loc[idx, 'total_home_team_age'] = best_home_team['age'].sum()
+            fixture_overview_df.loc[idx, 'total_away_team_age'] = best_away_team['age'].sum()
+
+            fixture_overview_df.loc[idx, 'total_home_team_height_cm'] = best_home_team['height_cm'].sum()
+            fixture_overview_df.loc[idx, 'total_away_team_height_cm'] = best_away_team['height_cm'].sum()
+
+            fixture_overview_df.loc[idx, 'total_home_team_weight_kg'] = best_home_team['weight_kg'].sum()
+            fixture_overview_df.loc[idx, 'total_away_team_weight_kg'] = best_away_team['weight_kg'].sum()
+
     print(f'Team found for {len(composed_teams) / len(fixture_overview_df["HomeTeam"].unique())*100}% of the teams')
     print(f'Uncomposed teams: {set(uncomposed_teams)}')
 
-    fixture_overview_df.dropna(subset=['total_home_team_price', 'total_away_team_price'], inplace=True)
+    fixture_overview_df.dropna(inplace=True)
 
     fixture_overview_df.to_csv('prepped_data_set.csv')
 
