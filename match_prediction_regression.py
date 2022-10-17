@@ -82,10 +82,14 @@ def plot_predictions(true, preds, label=''):
     # create quadrant
     roc_t = 0.0
     roc_v = 0.0
-    ax.fill_between([min(np.append(true, preds)), roc_t], min(np.append(true, preds)), roc_v, alpha=0.3, color='#1F98D0')  # blue
-    ax.fill_between([roc_t, max(np.append(true, preds))], min(np.append(true, preds)), roc_v, alpha=0.3, color='#DA383D')  # yellow
-    ax.fill_between([min(np.append(true, preds)), roc_t], roc_v, max(np.append(true, preds)), alpha=0.3, color='#DA383D')  # orange
-    ax.fill_between([roc_t, max(np.append(true, preds))], roc_v, max(np.append(true, preds)), alpha=0.3, color='#1F98D0')  # red
+    ax.fill_between([min(np.append(true, preds)), roc_t], min(np.append(true, preds)), roc_v,
+                    alpha=0.3, color='#1F98D0')  # blue
+    ax.fill_between([roc_t, max(np.append(true, preds))], min(np.append(true, preds)), roc_v,
+                    alpha=0.3, color='#DA383D')  # yellow
+    ax.fill_between([min(np.append(true, preds)), roc_t], roc_v, max(np.append(true, preds)),
+                    alpha=0.3, color='#DA383D')  # orange
+    ax.fill_between([roc_t, max(np.append(true, preds))], roc_v, max(np.append(true, preds)),
+                    alpha=0.3, color='#1F98D0')  # red
 
     plt.grid(True)
     plt.show()
@@ -104,17 +108,46 @@ if __name__ == '__main__':
 
     fixture_overview_df['team_victory'] = fixture_overview_df['HomeTeamScore'] - fixture_overview_df['AwayTeamScore']
 
+    features_to_extract = {
+        'general': ['value_eur', 'potential', 'overall', 'work_rate', 'international_reputation', 'age', 'height_cm',
+                    'weight_kg', 'pace', 'shooting', 'passing', 'dribbling', 'defending', 'physic',
+                    'power_shot_power', 'power_jumping', 'power_stamina', 'power_strength', 'power_long_shots',
+                    'movement_acceleration', 'movement_sprint_speed', 'movement_agility', 'movement_reactions',
+                    'movement_balance',
+                    'skill_dribbling', 'skill_curve', 'skill_fk_accuracy', 'skill_long_passing', 'skill_ball_control',
+                    'mentality_aggression', 'mentality_interceptions', 'mentality_positioning', 'mentality_vision',
+                    'mentality_penalties', 'mentality_composure'],
+        'goal': ['goalkeeping_diving', 'goalkeeping_handling', 'goalkeeping_kicking',
+                 'goalkeeping_positioning', 'goalkeeping_reflexes', 'goalkeeping_speed'],
+        'def': ['defending_marking_awareness', 'defending_standing_tackle', 'defending_sliding_tackle'],
+        'att': ['attacking_crossing', 'attacking_finishing', 'attacking_heading_accuracy', 'attacking_short_passing',
+                'attacking_volleys']
+    }
+
     line_definitions = {"goal": ['GK'], "def": ['B'], "mid": ['M'], "att": ['CAM', 'CF', 'ST']}
-    for key, item in line_definitions.items():
-        features_to_use = [f'total_home_team_price_{key}', f'total_away_team_price_{key}',
-                           f'total_home_team_potential_{key}', f'total_away_team_potential_{key}',
-                           f'total_home_team_overall_{key}', f'total_away_team_overall_{key}',
-                           # 'total_home_team_work_rate', 'total_away_team_work_rate',
-                           f'total_home_team_international_reputation_{key}', f'total_away_team_international_reputation_{key}',
-                           f'total_home_team_age_{key}', f'total_away_team_age_{key}',
-                           f'total_home_team_height_cm_{key}', f'total_away_team_height_cm_{key}',
-                           f'total_home_team_weight_kg_{key}', f'total_away_team_weight_kg_{key}',
-                           'national_game']
+    teams = ['home_team', 'away_team']
+    features_to_use = ['national_game']
+
+    # generate
+    for line_key, item in line_definitions.items():
+        for team in teams:
+            # loop over the general features
+            for general_feat in features_to_extract['general']:
+                features_to_use.append(f'{team}_{general_feat}_{line_key}')
+
+            # line specific features
+            if line_key == 'goal':
+                # goalkeeping_diving,goalkeeping_handling,goalkeeping_kicking,goalkeeping_positioning,goalkeeping_reflexes,goalkeeping_speed
+                for goal_feat in features_to_extract['goal']:
+                    features_to_use.append(f'{team}_{goal_feat}_{line_key}')
+
+            if line_key == 'def':
+                for def_feat in features_to_extract['def']:
+                    features_to_use.append(f'{team}_{def_feat}_{line_key}')
+
+            if line_key == 'att':
+                for att_feat in features_to_extract['att']:
+                    features_to_use.append(f'{team}_{att_feat}_{line_key}')
 
     # print(fixture_overview_df[features_to_use].info())
 

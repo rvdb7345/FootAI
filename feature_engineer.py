@@ -132,10 +132,21 @@ if __name__ == '__main__':
 
     line_definitions = {"goal": ['GK'], "def": ['B'], "mid": ['M'], "att": ['CAM', 'CF', 'ST']}
 
-    # fixture_overview_df['total_home_team_price'] = 0
-    # fixture_overview_df['total_away_team_price'] = 0
-    # fixture_overview_df['total_home_team_potential'] = 0
-    # fixture_overview_df['total_away_team_potential'] = 0
+    features_to_extract = {
+        'general': ['value_eur', 'potential', 'overall', 'work_rate', 'international_reputation', 'age', 'height_cm',
+                    'weight_kg', 'pace', 'shooting', 'passing', 'dribbling', 'defending', 'physic',
+                    'power_shot_power', 'power_jumping', 'power_stamina', 'power_strength', 'power_long_shots',
+                    'movement_acceleration', 'movement_sprint_speed', 'movement_agility', 'movement_reactions',
+                    'movement_balance',
+                    'skill_dribbling', 'skill_curve', 'skill_fk_accuracy', 'skill_long_passing', 'skill_ball_control',
+                    'mentality_aggression', 'mentality_interceptions', 'mentality_positioning', 'mentality_vision',
+                    'mentality_penalties', 'mentality_composure'],
+        'goal': ['goalkeeping_diving', 'goalkeeping_handling', 'goalkeeping_kicking',
+                 'goalkeeping_positioning', 'goalkeeping_reflexes', 'goalkeeping_speed'],
+        'def': ['defending_marking_awareness', 'defending_standing_tackle', 'defending_sliding_tackle'],
+        'att': ['attacking_crossing', 'attacking_finishing', 'attacking_heading_accuracy', 'attacking_short_passing',
+                'attacking_volleys']
+    }
 
     composed_teams = {}
     uncomposed_teams = []
@@ -169,35 +180,32 @@ if __name__ == '__main__':
         if best_home_team is not None and best_away_team is not None:
 
             # get features for different lines in the game
-            for key, line in line_definitions.items():
+            for line_key, line in line_definitions.items():
                 home_players_in_line = best_home_team[best_home_team['chosen_position'].str.contains('|'.join(line))]
                 away_players_in_line = best_away_team[best_away_team['chosen_position'].str.contains('|'.join(line))]
 
-                fixture_overview_df.loc[idx, f'total_home_team_price_{key}'] = home_players_in_line['value_eur'].sum()
-                fixture_overview_df.loc[idx, f'total_away_team_price_{key}'] = away_players_in_line['value_eur'].sum()
+                # loop over the different teams
+                for team, players_in_line in {"home_team": home_players_in_line,
+                                              "away_team": away_players_in_line}.items():
 
-                fixture_overview_df.loc[idx, f'total_home_team_potential_{key}'] = home_players_in_line['potential'].sum()
-                fixture_overview_df.loc[idx, f'total_away_team_potential_{key}'] = away_players_in_line['potential'].sum()
-
-                fixture_overview_df.loc[idx, f'total_home_team_overall_{key}'] = home_players_in_line['overall'].sum()
-                fixture_overview_df.loc[idx, f'total_away_team_overall_{key}'] = away_players_in_line['overall'].sum()
-
-                fixture_overview_df.loc[idx, f'total_home_team_work_rate_{key}'] = home_players_in_line['work_rate'].sum()
-                fixture_overview_df.loc[idx, f'total_away_team_work_rate_{key}'] = away_players_in_line['work_rate'].sum()
-
-                fixture_overview_df.loc[idx, f'total_home_team_international_reputation_{key}'] = home_players_in_line[
-                    'international_reputation'].sum()
-                fixture_overview_df.loc[idx, f'total_away_team_international_reputation_{key}'] = away_players_in_line[
-                    'international_reputation'].sum()
-
-                fixture_overview_df.loc[idx, f'total_home_team_age_{key}'] = home_players_in_line['age'].sum()
-                fixture_overview_df.loc[idx, f'total_away_team_age_{key}'] = away_players_in_line['age'].sum()
-
-                fixture_overview_df.loc[idx, f'total_home_team_height_cm_{key}'] = home_players_in_line['height_cm'].sum()
-                fixture_overview_df.loc[idx, f'total_away_team_height_cm_{key}'] = away_players_in_line['height_cm'].sum()
-
-                fixture_overview_df.loc[idx, f'total_home_team_weight_kg_{key}'] = home_players_in_line['weight_kg'].sum()
-                fixture_overview_df.loc[idx, f'total_away_team_weight_kg_{key}'] = away_players_in_line['weight_kg'].sum()
+                    # loop over the general features
+                    for general_feat in features_to_extract['general']:
+                        fixture_overview_df.loc[idx, f'{team}_{general_feat}_{line_key}'] = \
+                            players_in_line[general_feat].sum()
+                    # line specific features
+                    if line_key == 'goal':
+                        # goalkeeping_diving,goalkeeping_handling,goalkeeping_kicking,goalkeeping_positioning,goalkeeping_reflexes,goalkeeping_speed
+                        for goal_feat in features_to_extract['goal']:
+                            fixture_overview_df.loc[idx, f'{team}_{goal_feat}_{line_key}'] = players_in_line[
+                                goal_feat].sum()
+                    if line_key == 'def':
+                        for def_feat in features_to_extract['def']:
+                            fixture_overview_df.loc[idx, f'{team}_{def_feat}_{line_key}'] = players_in_line[
+                                def_feat].sum()
+                    if line_key == 'att':
+                        for att_feat in features_to_extract['att']:
+                            fixture_overview_df.loc[idx, f'{team}_{att_feat}_{line_key}'] = players_in_line[
+                                att_feat].sum()
 
     print(f'Team found for {len(composed_teams) / len(fixture_overview_df["HomeTeam"].unique()) * 100}% of the teams')
     print(f'Uncomposed teams: {set(uncomposed_teams)}')
