@@ -23,4 +23,5 @@ player_dfs = [
 keys_in_22 = player_22_df.columns
 
 for player_df in player_dfs:
-    print(f'Diff in columns {set(player_16_df.columns) - set(player_df.columns)}')
+    print(f'{player_df.describe()}')
+    print(f'Diff in columns {set(player_22_df.columns) - set(player_df.columns)}')

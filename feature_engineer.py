@@ -77,9 +77,9 @@ def get_best_lineup(lineup_df, formation='', measurement=''):
     return formation, composed_squad
 
 
-def compose_best_squad(team):
+def compose_best_squad(team, player_df):
     """Compose the best possible team based on the available players."""
-    all_potential_players_in_team = load_players_per_team(team, player_22_df, row['national_game'])
+    all_potential_players_in_team = load_players_per_team(team, player_df, row['national_game'])
 
     if len(all_potential_players_in_team) >= 11:
         best_formation = obtain_best_formation(all_potential_players_in_team)
@@ -125,11 +125,25 @@ def parse_work_rate(work_rate_column):
     })
     return work_rate_column
 
+def load_all_different_player_data():
+    player_data = {
+        2022: pd.read_csv('fifa_player_data/players_22.csv'),
+        2021: pd.read_csv('fifa_player_data/players_21.csv'),
+        2020: pd.read_csv('fifa_player_data/players_20.csv'),
+        2019: pd.read_csv('fifa_player_data/players_19.csv'),
+        2018: pd.read_csv('fifa_player_data/players_18.csv'),
+        2017: pd.read_csv('fifa_player_data/players_17.csv'),
+        2016: pd.read_csv('fifa_player_data/players_16.csv'),
+        2015: pd.read_csv('fifa_player_data/players_15.csv')
+    }
+    return player_data
+
 
 if __name__ == '__main__':
     fixture_overview_df = pd.read_csv('prepped_data_sources/prepped_fixture_overview.csv')
-    player_22_df = pd.read_csv('fifa_player_data/players_22.csv')
-    player_22_df['work_rate'] = parse_work_rate(player_22_df['work_rate'])
+    player_data = load_all_different_player_data()
+    for key in player_data:
+        player_data[key]['work_rate'] = parse_work_rate(player_data[key]['work_rate'])
 
     # define line definitions and features we want to extract
     line_definitions = {"goal": ['GK'], "def": ['B'], "mid": ['M'], "att": ['CAM', 'CF', 'ST']}
@@ -150,34 +164,35 @@ if __name__ == '__main__':
                 'attacking_volleys']
     }
 
-    composed_teams = {}
-    uncomposed_teams = []
+    composed_teams = {2015: {}, 2016: {}, 2017: {}, 2018: {}, 2019: {}, 2020: {}, 2021: {}, 2022: {}}
+    uncomposed_teams = {2015: [], 2016: [], 2017: [], 2018: [], 2019: [], 2020: [], 2021: [], 2022: []}
     for idx, row in tqdm(fixture_overview_df.iterrows()):
         hometeam = row['HomeTeam']
         awayteam = row['AwayTeam']
+        year = row['Year']
 
         # change names to match fifa club names
         hometeam = change_club_name_to_match_fifa(hometeam)
         awayteam = change_club_name_to_match_fifa(awayteam)
 
         # obtain best home and away teams
-        if hometeam not in composed_teams.keys():
-            best_home_team = compose_best_squad(hometeam)
+        if hometeam not in composed_teams[year].keys():
+            best_home_team = compose_best_squad(hometeam, player_df=player_data[year])
             if best_home_team is not None:
-                composed_teams[hometeam] = best_home_team
+                composed_teams[year][hometeam] = best_home_team
             else:
-                uncomposed_teams.append(hometeam)
+                uncomposed_teams[year].append(hometeam)
         else:
-            best_home_team = composed_teams[hometeam]
+            best_home_team = composed_teams[year][hometeam]
 
-        if awayteam not in composed_teams.keys():
-            best_away_team = compose_best_squad(awayteam)
+        if awayteam not in composed_teams[year].keys():
+            best_away_team = compose_best_squad(awayteam, player_df=player_data[year])
             if best_away_team is not None:
-                composed_teams[awayteam] = best_away_team
+                composed_teams[year][awayteam] = best_away_team
             else:
-                uncomposed_teams.append(awayteam)
+                uncomposed_teams[year].append(awayteam)
         else:
-            best_away_team = composed_teams[awayteam]
+            best_away_team = composed_teams[year][awayteam]
 
         if best_home_team is not None and best_away_team is not None:
 
@@ -209,7 +224,8 @@ if __name__ == '__main__':
                             fixture_overview_df.loc[idx, f'{team}_{att_feat}_{line_key}'] = players_in_line[
                                 att_feat].sum()
 
-    print(f'Team found for {len(composed_teams) / len(fixture_overview_df["HomeTeam"].unique()) * 100}% of the teams')
+    all_composed_teams = set(sum([key for key, item in composed_teams.items()], []))
+    print(f'Team found for {len(all_composed_teams) / len(fixture_overview_df["HomeTeam"].unique()) * 100}% of the teams')
     print(f'Uncomposed teams: {set(uncomposed_teams)}')
 
     fixture_overview_df.dropna(inplace=True)
