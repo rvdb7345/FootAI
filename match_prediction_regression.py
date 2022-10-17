@@ -11,7 +11,10 @@ MAX_EPOCHS = 1000
 
 
 def sign_penalty(y_true, y_pred):
-    penalty = 3.
+    """Function that assigns a heavier weight to errors that fall into the wrong quandrant.
+    For match outcome prediction it is most important that we predict the right sign, because this gets the most points.
+    """
+    penalty = 2.
     loss = tf.where(tf.less(y_true * y_pred, 0),
                     penalty * tf.square(y_true - y_pred),
                     tf.square(y_true - y_pred))
@@ -19,7 +22,8 @@ def sign_penalty(y_true, y_pred):
     return tf.reduce_mean(loss, axis=-1)
 
 
-def compile_and_fit(model, X_train, y_train, X_val, y_val):
+def fit(model, X_train, y_train, X_val, y_val):
+    """Fit the model"""
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
                                                       patience=200,
                                                       mode='min')
@@ -34,7 +38,7 @@ def compile_and_fit(model, X_train, y_train, X_val, y_val):
 
 def create_tensorflow_model_regressor(num_features):
     inputs = tf.keras.Input(shape=(len(num_features),))
-    x = tf.keras.layers.Dense(256, activation=tf.nn.leaky_relu)(inputs)
+    x = tf.keras.layers.Dense(512, activation=tf.nn.leaky_relu)(inputs)
     x = tf.keras.layers.BatchNormalization()(x)
     # x = tf.keras.layers.Dropout(0.1)(x)
     x = tf.keras.layers.Dense(256, activation=tf.nn.leaky_relu)(x)
@@ -77,19 +81,21 @@ def plot_predictions(true, preds, label=''):
 
     fix, ax = plt.subplots()
     plt.title(f'{label}')
+    plt.xlabel('True value')
+    plt.ylabel('Predicted value')
     plt.scatter(true, preds)
 
     # create quadrant
     roc_t = 0.0
     roc_v = 0.0
     ax.fill_between([min(np.append(true, preds)), roc_t], min(np.append(true, preds)), roc_v,
-                    alpha=0.3, color='#1F98D0')  # blue
+                    alpha=0.3, color='#1F98D0')
     ax.fill_between([roc_t, max(np.append(true, preds))], min(np.append(true, preds)), roc_v,
-                    alpha=0.3, color='#DA383D')  # yellow
+                    alpha=0.3, color='#DA383D')
     ax.fill_between([min(np.append(true, preds)), roc_t], roc_v, max(np.append(true, preds)),
-                    alpha=0.3, color='#DA383D')  # orange
+                    alpha=0.3, color='#DA383D')
     ax.fill_between([roc_t, max(np.append(true, preds))], roc_v, max(np.append(true, preds)),
-                    alpha=0.3, color='#1F98D0')  # red
+                    alpha=0.3, color='#1F98D0')
 
     plt.grid(True)
     plt.show()
@@ -97,17 +103,10 @@ def plot_predictions(true, preds, label=''):
 if __name__ == '__main__':
     fixture_overview_df = pd.read_csv('prepped_data_set.csv')
 
-    # prep prediction column
-    # fixture_overview_df['team_victory'] = 0
-    # fixture_overview_df.loc[fixture_overview_df['HomeTeamScore'] > fixture_overview_df['AwayTeamScore'],
-    #                         'team_victory'] = 0
-    # fixture_overview_df.loc[fixture_overview_df['HomeTeamScore'] == fixture_overview_df['AwayTeamScore'],
-    #                         'team_victory'] = 1
-    # fixture_overview_df.loc[fixture_overview_df['HomeTeamScore'] < fixture_overview_df['AwayTeamScore'],
-    #                         'team_victory'] = 2
-
+    # add predictable
     fixture_overview_df['team_victory'] = fixture_overview_df['HomeTeamScore'] - fixture_overview_df['AwayTeamScore']
 
+    # the features we want to use for out model
     features_to_extract = {
         'general': ['value_eur', 'potential', 'overall', 'work_rate', 'international_reputation', 'age', 'height_cm',
                     'weight_kg', 'pace', 'shooting', 'passing', 'dribbling', 'defending', 'physic',
@@ -124,11 +123,14 @@ if __name__ == '__main__':
                 'attacking_volleys']
     }
 
+    # the different positions and teams
     line_definitions = {"goal": ['GK'], "def": ['B'], "mid": ['M'], "att": ['CAM', 'CF', 'ST']}
     teams = ['home_team', 'away_team']
+
+    # list for the features and the base of features that are not player dependent
     features_to_use = ['national_game']
 
-    # generate
+    # generate list of features to load from the prepped dataset
     for line_key, item in line_definitions.items():
         for team in teams:
             # loop over the general features
@@ -149,8 +151,6 @@ if __name__ == '__main__':
                 for att_feat in features_to_extract['att']:
                     features_to_use.append(f'{team}_{att_feat}_{line_key}')
 
-    # print(fixture_overview_df[features_to_use].info())
-
     # split data in to train, validation and test
     X_train, X_test, y_train, y_test = train_test_split(
         preprocessing.StandardScaler().fit_transform(fixture_overview_df[features_to_use].values),
@@ -164,44 +164,18 @@ if __name__ == '__main__':
     print(f'val length: {len(X_val)}')
     print(f'test length: {len(X_test)}')
 
+    # create the model
     model = create_tensorflow_model_regressor(features_to_use)
 
-    history = compile_and_fit(model, X_train, y_train, X_val, y_val)
-
+    # fit the model and visualise the results
+    history = fit(model, X_train, y_train, X_val, y_val)
     plot_loss(history)
 
-    print(model.evaluate(X_test, y_test))
-
-    # predict for the training and the test data
+    # predict for the training and the test data and visualise the results
     test_pred = model.predict(X_test, verbose=0)
     train_pred = model.predict(X_train, verbose=0)
-
     plot_predictions(y_test, test_pred, label='test')
     plot_predictions(y_train, train_pred, label='train')
-
-    print(test_pred)
-    print(train_pred)
-
-    # param = {
-    #     'gamma': 1,
-    #     'learning_rate': 0.1,
-    #     'max_depth': 1000,
-    #     'n_jobs': -1,
-    #     'verbosity': 1,
-    #     'max_leaves': 2000
-    # }
-    #
-    # print('start to train the model')
-    # xgb_cl = xgboost.XGBClassifier(**param)
-    # model = xgb_cl.fit(X_train, y_train)
-    #
-    # test_pred = model.predict(X_test)
-    # train_pred = model.predict(X_train)
-    #
-    # print(test_pred)
-
-    # print("Test confusion matrix \n", confusion_matrix(y_test, test_pred))
-    # print("Train confusion matrix \n", confusion_matrix(y_train, train_pred))
 
     print(f'Test score: {mean_absolute_error(y_test, test_pred)}')
     print(f'Train score: {mean_absolute_error(y_train, train_pred)}')
