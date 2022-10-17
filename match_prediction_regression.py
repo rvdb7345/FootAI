@@ -4,16 +4,25 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV, RandomizedSearchCV, ShuffleSplit
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import accuracy_score, confusion_matrix, mean_absolute_error
 import tensorflow as tf
 from sklearn import preprocessing
 
-MAX_EPOCHS = 10
+MAX_EPOCHS = 1000
+
+
+def sign_penalty(y_true, y_pred):
+    penalty = 3.
+    loss = tf.where(tf.less(y_true * y_pred, 0),
+                    penalty * tf.square(y_true - y_pred),
+                    tf.square(y_true - y_pred))
+
+    return tf.reduce_mean(loss, axis=-1)
 
 
 def compile_and_fit(model, X_train, y_train, X_val, y_val):
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
-                                                      patience=100,
+                                                      patience=200,
                                                       mode='min')
 
     history = model.fit(X_train, y_train, epochs=MAX_EPOCHS,
@@ -23,39 +32,20 @@ def compile_and_fit(model, X_train, y_train, X_val, y_val):
     return history
 
 
-def create_tensorflow_model_classifier(num_features):
-    inputs = tf.keras.Input(shape=(len(num_features),))
-    x = tf.keras.layers.Dense(100, activation=tf.nn.leaky_relu)(inputs)
-    # x = tf.keras.layers.Dropout(0.1)(x)
-    x = tf.keras.layers.Dense(100, activation=tf.nn.leaky_relu)(x)
-    x = tf.keras.layers.Dense(100, activation=tf.nn.leaky_relu)(x)
-    x = tf.keras.layers.Dense(100, activation=tf.nn.leaky_relu)(x)
-    outputs = tf.keras.layers.Dense(3, activation=tf.nn.softmax)(x)
-
-    model = tf.keras.Model(inputs=inputs, outputs=outputs)
-    # print(model.summary())
-
-    lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
-        initial_learning_rate=1e-3,
-        decay_steps=10000,
-        decay_rate=0.9)
-    optimizer = tf.keras.optimizers.Adam(learning_rate=lr_schedule)
-
-    model.compile(loss=tf.keras.losses.BinaryCrossentropy(),
-                  optimizer=optimizer,
-                  metrics=['accuracy'])
-
-    return model
-
 
 def create_tensorflow_model_regressor(num_features):
     inputs = tf.keras.Input(shape=(len(num_features),))
-    x = tf.keras.layers.Dense(100, activation=tf.nn.leaky_relu)(inputs)
+    x = tf.keras.layers.Dense(256, activation=tf.nn.leaky_relu)(inputs)
+    x = tf.keras.layers.BatchNormalization()(x)
     # x = tf.keras.layers.Dropout(0.1)(x)
-    x = tf.keras.layers.Dense(100, activation=tf.nn.leaky_relu)(x)
-    x = tf.keras.layers.Dense(100, activation=tf.nn.leaky_relu)(x)
-    x = tf.keras.layers.Dense(100, activation=tf.nn.leaky_relu)(x)
-    outputs = tf.keras.layers.Dense(1, activation=tf.nn.sigmoid)(x)
+    x = tf.keras.layers.Dense(256, activation=tf.nn.leaky_relu)(x)
+    x = tf.keras.layers.BatchNormalization()(x)
+    x = tf.keras.layers.Dense(128, activation=tf.nn.leaky_relu)(x)
+    x = tf.keras.layers.BatchNormalization()(x)
+    x = tf.keras.layers.Dense(64, activation=tf.nn.leaky_relu)(x)
+    x = tf.keras.layers.BatchNormalization()(x)
+    x = tf.keras.layers.Dense(16, activation=tf.nn.leaky_relu)(x)
+    outputs = tf.keras.layers.Dense(1)(x)
     model = tf.keras.Model(inputs=inputs, outputs=outputs)
     # print(model.summary())
 
@@ -65,7 +55,9 @@ def create_tensorflow_model_regressor(num_features):
         decay_rate=0.9)
     optimizer = tf.keras.optimizers.Adam(learning_rate=lr_schedule)
 
-    model.compile(loss=tf.keras.losses.BinaryCrossentropy(),
+    tf.keras.losses.sign_penalty = sign_penalty
+
+    model.compile(loss=sign_penalty,
                   optimizer=optimizer,
                   metrics=['mean_absolute_error'])
 
@@ -79,13 +71,25 @@ def plot_loss(history):
     plt.ylabel('Error [MPG]')
     plt.legend()
     plt.grid(True)
+    plt.show()
 
 def plot_predictions(true, preds, label=''):
-    plt.figure()
+
+
+    fix, ax = plt.subplots()
     plt.title(f'{label}')
-    plt.plot(true, preds)
-    plt.legend()
+    plt.scatter(true, preds)
+
+    # create quadrant
+    roc_t = 0.0
+    roc_v = 0.0
+    ax.fill_between([min(np.append(true, preds)), roc_t], min(np.append(true, preds)), roc_v, alpha=0.3, color='#1F98D0')  # blue
+    ax.fill_between([roc_t, max(np.append(true, preds))], min(np.append(true, preds)), roc_v, alpha=0.3, color='#DA383D')  # yellow
+    ax.fill_between([min(np.append(true, preds)), roc_t], roc_v, max(np.append(true, preds)), alpha=0.3, color='#DA383D')  # orange
+    ax.fill_between([roc_t, max(np.append(true, preds))], roc_v, max(np.append(true, preds)), alpha=0.3, color='#1F98D0')  # red
+
     plt.grid(True)
+    plt.show()
 
 if __name__ == '__main__':
     fixture_overview_df = pd.read_csv('prepped_data_set.csv')
@@ -130,16 +134,7 @@ if __name__ == '__main__':
 
     model = create_tensorflow_model_regressor(features_to_use)
 
-    one_hot_y_train = np.zeros((y_train.size, y_train.max() + 1))
-    one_hot_y_train[np.arange(y_train.size), y_train] = 1
-
-    one_hot_y_val = np.zeros((y_val.size, y_val.max() + 1))
-    one_hot_y_val[np.arange(y_val.size), y_val] = 1
-
-    one_hot_y_test = np.zeros((y_test.size, y_test.max() + 1))
-    one_hot_y_test[np.arange(y_test.size), y_test] = 1
-
-    history = compile_and_fit(model, X_train, one_hot_y_train, X_val, one_hot_y_val)
+    history = compile_and_fit(model, X_train, y_train, X_val, y_val)
 
     plot_loss(history)
 
@@ -148,10 +143,6 @@ if __name__ == '__main__':
     # predict for the training and the test data
     test_pred = model.predict(X_test, verbose=0)
     train_pred = model.predict(X_train, verbose=0)
-
-    # convert predictions to labels
-    test_pred = np.argmax(test_pred, axis=1)
-    train_pred = np.argmax(train_pred, axis=1)
 
     plot_predictions(y_test, test_pred, label='test')
     plot_predictions(y_train, train_pred, label='train')
@@ -177,8 +168,8 @@ if __name__ == '__main__':
     #
     # print(test_pred)
 
-    print("Test confusion matrix \n", confusion_matrix(y_test, test_pred))
-    print("Train confusion matrix \n", confusion_matrix(y_train, train_pred))
+    # print("Test confusion matrix \n", confusion_matrix(y_test, test_pred))
+    # print("Train confusion matrix \n", confusion_matrix(y_train, train_pred))
 
-    print(f'Test score: {accuracy_score(y_test, test_pred)}')
-    print(f'Train score: {accuracy_score(y_train, train_pred)}')
+    print(f'Test score: {mean_absolute_error(y_test, test_pred)}')
+    print(f'Train score: {mean_absolute_error(y_train, train_pred)}')
