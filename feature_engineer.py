@@ -2,14 +2,18 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-formations_dict = {'4-3-1-2': ['GK', 'RB|RWB', 'LCB|CB', 'RCB|CB', 'LB|LWB', 'CDM|CM', 'CDM|CM', 'CDM|CM', 'CAM|CF', 'CF|ST', 'CF|ST'],
-                   '4-3-2-1': ['GK', 'RB|RWB', 'LCB|CB', 'RCB|CB', 'LB|LWB', 'CDM|CM', 'CDM|CM', 'CDM|CM', 'CAM|CF', 'CAM|CF', 'CF|ST'],
-                   '4-3-3': ['GK', 'RB|RWB', 'LCB|CB', 'RCB|CB', 'LB|LWB', 'CDM|CM', 'CDM|CM', 'CDM|CM', 'RW|RF|ST', 'CF|ST', 'LW|LF|ST'],
-                   '4-4-2': ['GK', 'RB|RWB', 'RCB|CB', 'LCB|CB', 'LB|LWB', 'RM|RW', 'CDM|CM', 'CDM|CM', 'LM|LW', 'CF|ST', 'CF|ST'],
-                   '4-5-1': ['GK', 'RB|RWB', 'RCB|CB', 'LCB|CB', 'LB|LWB', 'RM|RW', 'CDM|CM', 'CDM|CM', 'LM|LW', 'CF|ST', 'CF|ST'],
-                   '3-4-1-2': ['GK', 'RCB|CB', 'CB', 'LCB|CB', 'RM|RW', 'CDM|CM', 'CDM|CM', 'LM|LW', 'CAM|CF', 'CF|ST', 'CF|ST'],
-                   '3-4-3': ['GK', 'RCB|CB', 'CB', 'LCB|CB', 'RWB|RM', 'CDM|CM', 'CDM|CM', 'LWB|LM', 'RW|RF|ST', 'CF|ST', 'LW|LF|ST'],
-                   '3-5-2': ['GK', 'RCB|CB', 'CB', 'LCB|CB', 'RM|RWB|RB', 'CDM|CM', 'CDM|CM', 'CDM|CM', 'LM|LWB|LB', 'CF|ST', 'CF|ST']}
+formations_dict = {
+    '4-3-1-2': ['GK', 'RB|RWB', 'LCB|CB', 'RCB|CB', 'LB|LWB', 'CDM|CM', 'CDM|CM', 'CDM|CM', 'CAM|CF', 'CF|ST', 'CF|ST'],
+    '4-3-2-1': ['GK', 'RB|RWB', 'LCB|CB', 'RCB|CB', 'LB|LWB', 'CDM|CM', 'CDM|CM', 'CDM|CM', 'CAM|CF', 'CAM|CF',
+                'CF|ST'],
+    '4-3-3':   ['GK', 'RB|RWB', 'LCB|CB', 'RCB|CB', 'LB|LWB', 'CDM|CM', 'CDM|CM', 'CDM|CM', 'RW|RF|ST', 'CF|ST',
+              'LW|LF|ST'],
+    '4-4-2':   ['GK', 'RB|RWB', 'RCB|CB', 'LCB|CB', 'LB|LWB', 'RM|RW', 'CDM|CM', 'CDM|CM', 'LM|LW', 'CF|ST', 'CF|ST'],
+    '4-5-1':   ['GK', 'RB|RWB', 'RCB|CB', 'LCB|CB', 'LB|LWB', 'RM|RW', 'CDM|CM', 'CDM|CM', 'LM|LW', 'CF|ST', 'CF|ST'],
+    '3-4-1-2': ['GK', 'RCB|CB', 'CB', 'LCB|CB', 'RM|RW', 'CDM|CM', 'CDM|CM', 'LM|LW', 'CAM|CF', 'CF|ST', 'CF|ST'],
+    '3-4-3':   ['GK', 'RCB|CB', 'CB', 'LCB|CB', 'RWB|RM', 'CDM|CM', 'CDM|CM', 'LWB|LM', 'RW|RF|ST', 'CF|ST', 'LW|LF|ST'],
+    '3-5-2':   ['GK', 'RCB|CB', 'CB', 'LCB|CB', 'RM|RWB|RB', 'CDM|CM', 'CDM|CM', 'CDM|CM', 'LM|LWB|LB', 'CF|ST', 'CF|ST']}
+
 
 def load_players_per_team(team, player_list, national):
     """Load all players that could potentially have played."""
@@ -20,6 +24,7 @@ def load_players_per_team(team, player_list, national):
         team_player_list = player_list.loc[(player_list['nationality_name'] == team)]
 
     return team_player_list
+
 
 def obtain_best_formation(players, measurement='overall'):
     """Find the formation for which we have the best players."""
@@ -66,6 +71,7 @@ def get_best_lineup(lineup_df, formation='', measurement=''):
     composed_squad = pd.DataFrame()
     for pos in squad_lineup:
         best_player_record = copy_df.loc[[copy_df[copy_df['player_positions'].str.contains(pos)][measurement].idxmax()]]
+        best_player_record['chosen_position'] = pos
         composed_squad = pd.concat([composed_squad, best_player_record])
         copy_df.drop(copy_df[copy_df['player_positions'].str.contains(pos)][measurement].idxmax(), inplace=True)
     return formation, composed_squad
@@ -80,16 +86,17 @@ def compose_best_squad(team):
 
         if best_formation is not None:
             formation, composed_team = get_best_lineup(all_potential_players_in_team,
-                                            formation=best_formation, measurement='overall')
+                                                       formation=best_formation, measurement='overall')
 
             assert len(composed_team) == 11, f'Composition {team} not correct, ' \
-                                                f'{len(composed_team[1])} players'
+                                             f'{len(composed_team[1])} players'
 
             return composed_team
         else:
             return None
     else:
         return None
+
 
 def change_club_name_to_match_fifa(club):
     parsed_name = club
@@ -102,6 +109,7 @@ def change_club_name_to_match_fifa(club):
     if club == 'Guinea-Bissau':
         parsed_name = 'Guinea Bissau'
     return parsed_name
+
 
 if __name__ == '__main__':
     fixture_overview_df = pd.read_csv('prepped_data_sources/prepped_fixture_overview.csv')
@@ -121,10 +129,13 @@ if __name__ == '__main__':
     # assert False
 
     # initiate feature columns
-    fixture_overview_df['total_home_team_price'] = 0
-    fixture_overview_df['total_away_team_price'] = 0
-    fixture_overview_df['total_home_team_potential'] = 0
-    fixture_overview_df['total_away_team_potential'] = 0
+
+    line_definitions = {"goal": ['GK'], "def": ['B'], "mid": ['M'], "att": ['CAM', 'CF', 'ST']}
+
+    # fixture_overview_df['total_home_team_price'] = 0
+    # fixture_overview_df['total_away_team_price'] = 0
+    # fixture_overview_df['total_home_team_potential'] = 0
+    # fixture_overview_df['total_away_team_potential'] = 0
 
     composed_teams = {}
     uncomposed_teams = []
@@ -156,36 +167,41 @@ if __name__ == '__main__':
             best_away_team = composed_teams[awayteam]
 
         if best_home_team is not None and best_away_team is not None:
-            fixture_overview_df.loc[idx, 'total_home_team_price'] = best_home_team['value_eur'].sum()
-            fixture_overview_df.loc[idx, 'total_away_team_price'] = best_away_team['value_eur'].sum()
 
-            fixture_overview_df.loc[idx, 'total_home_team_potential'] = best_home_team['potential'].sum()
-            fixture_overview_df.loc[idx, 'total_away_team_potential'] = best_away_team['potential'].sum()
+            # get features for different lines in the game
+            for key, line in line_definitions.items():
+                home_players_in_line = best_home_team[best_home_team['chosen_position'].str.contains('|'.join(line))]
+                away_players_in_line = best_away_team[best_away_team['chosen_position'].str.contains('|'.join(line))]
 
-            fixture_overview_df.loc[idx, 'total_home_team_overall'] = best_home_team['overall'].sum()
-            fixture_overview_df.loc[idx, 'total_away_team_overall'] = best_away_team['overall'].sum()
+                fixture_overview_df.loc[idx, f'total_home_team_price_{key}'] = home_players_in_line['value_eur'].sum()
+                fixture_overview_df.loc[idx, f'total_away_team_price_{key}'] = away_players_in_line['value_eur'].sum()
 
-            fixture_overview_df.loc[idx, 'total_home_team_work_rate'] = best_home_team['work_rate'].sum()
-            fixture_overview_df.loc[idx, 'total_away_team_work_rate'] = best_away_team['work_rate'].sum()
+                fixture_overview_df.loc[idx, f'total_home_team_potential_{key}'] = home_players_in_line['potential'].sum()
+                fixture_overview_df.loc[idx, f'total_away_team_potential_{key}'] = away_players_in_line['potential'].sum()
 
-            fixture_overview_df.loc[idx, 'total_home_team_international_reputation'] = best_home_team['international_reputation'].sum()
-            fixture_overview_df.loc[idx, 'total_away_team_international_reputation'] = best_away_team['international_reputation'].sum()
+                fixture_overview_df.loc[idx, f'total_home_team_overall_{key}'] = home_players_in_line['overall'].sum()
+                fixture_overview_df.loc[idx, f'total_away_team_overall_{key}'] = away_players_in_line['overall'].sum()
 
-            fixture_overview_df.loc[idx, 'total_home_team_age'] = best_home_team['age'].sum()
-            fixture_overview_df.loc[idx, 'total_away_team_age'] = best_away_team['age'].sum()
+                fixture_overview_df.loc[idx, f'total_home_team_work_rate_{key}'] = home_players_in_line['work_rate'].sum()
+                fixture_overview_df.loc[idx, f'total_away_team_work_rate_{key}'] = away_players_in_line['work_rate'].sum()
 
-            fixture_overview_df.loc[idx, 'total_home_team_height_cm'] = best_home_team['height_cm'].sum()
-            fixture_overview_df.loc[idx, 'total_away_team_height_cm'] = best_away_team['height_cm'].sum()
+                fixture_overview_df.loc[idx, f'total_home_team_international_reputation_{key}'] = home_players_in_line[
+                    'international_reputation'].sum()
+                fixture_overview_df.loc[idx, f'total_away_team_international_reputation_{key}'] = away_players_in_line[
+                    'international_reputation'].sum()
 
-            fixture_overview_df.loc[idx, 'total_home_team_weight_kg'] = best_home_team['weight_kg'].sum()
-            fixture_overview_df.loc[idx, 'total_away_team_weight_kg'] = best_away_team['weight_kg'].sum()
+                fixture_overview_df.loc[idx, f'total_home_team_age_{key}'] = home_players_in_line['age'].sum()
+                fixture_overview_df.loc[idx, f'total_away_team_age_{key}'] = away_players_in_line['age'].sum()
 
-    print(f'Team found for {len(composed_teams) / len(fixture_overview_df["HomeTeam"].unique())*100}% of the teams')
+                fixture_overview_df.loc[idx, f'total_home_team_height_cm_{key}'] = home_players_in_line['height_cm'].sum()
+                fixture_overview_df.loc[idx, f'total_away_team_height_cm_{key}'] = away_players_in_line['height_cm'].sum()
+
+                fixture_overview_df.loc[idx, f'total_home_team_weight_kg_{key}'] = home_players_in_line['weight_kg'].sum()
+                fixture_overview_df.loc[idx, f'total_away_team_weight_kg_{key}'] = away_players_in_line['weight_kg'].sum()
+
+    print(f'Team found for {len(composed_teams) / len(fixture_overview_df["HomeTeam"].unique()) * 100}% of the teams')
     print(f'Uncomposed teams: {set(uncomposed_teams)}')
 
     fixture_overview_df.dropna(inplace=True)
 
     fixture_overview_df.to_csv('prepped_data_set.csv')
-
-
-

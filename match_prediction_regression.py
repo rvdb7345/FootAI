@@ -1,10 +1,9 @@
 import numpy as np
-import xgboost
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV, RandomizedSearchCV, ShuffleSplit
-from sklearn.metrics import accuracy_score, confusion_matrix, mean_absolute_error
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_absolute_error
 import tensorflow as tf
 from sklearn import preprocessing
 
@@ -105,17 +104,17 @@ if __name__ == '__main__':
 
     fixture_overview_df['team_victory'] = fixture_overview_df['HomeTeamScore'] - fixture_overview_df['AwayTeamScore']
 
-
-
-    features_to_use = ['total_home_team_price', 'total_away_team_price',
-                       'total_home_team_potential', 'total_away_team_potential',
-                       'total_home_team_overall', 'total_away_team_overall',
-                       # 'total_home_team_work_rate', 'total_away_team_work_rate',
-                       'total_home_team_international_reputation', 'total_away_team_international_reputation',
-                       'total_home_team_age', 'total_away_team_age',
-                       'total_home_team_height_cm', 'total_away_team_height_cm',
-                       'total_home_team_weight_kg', 'total_away_team_weight_kg',
-                       'national_game']
+    line_definitions = {"goal": ['GK'], "def": ['B'], "mid": ['M'], "att": ['CAM', 'CF', 'ST']}
+    for key, item in line_definitions.items():
+        features_to_use = [f'total_home_team_price_{key}', f'total_away_team_price_{key}',
+                           f'total_home_team_potential_{key}', f'total_away_team_potential_{key}',
+                           f'total_home_team_overall_{key}', f'total_away_team_overall_{key}',
+                           # 'total_home_team_work_rate', 'total_away_team_work_rate',
+                           f'total_home_team_international_reputation_{key}', f'total_away_team_international_reputation_{key}',
+                           f'total_home_team_age_{key}', f'total_away_team_age_{key}',
+                           f'total_home_team_height_cm_{key}', f'total_away_team_height_cm_{key}',
+                           f'total_home_team_weight_kg_{key}', f'total_away_team_weight_kg_{key}',
+                           'national_game']
 
     # print(fixture_overview_df[features_to_use].info())
 
