@@ -110,26 +110,28 @@ def change_club_name_to_match_fifa(club):
         parsed_name = 'Guinea Bissau'
     return parsed_name
 
+def parse_work_rate(work_rate_column):
+    """Work rate is given in high, medium or low. We have to parse it to integers."""
+    work_rate_column = work_rate_column.map({
+        'High/High': 6,
+        'High/Medium': 5,
+        'High/Low': 4,
+        'Medium/High': 5,
+        'Medium/Medium': 4,
+        'Medium/Low': 3,
+        'Low/High': 4,
+        'Low/Medium': 3,
+        'Low/Low': 2
+    })
+    return work_rate_column
+
 
 if __name__ == '__main__':
     fixture_overview_df = pd.read_csv('prepped_data_sources/prepped_fixture_overview.csv')
     player_22_df = pd.read_csv('fifa_player_data/players_22.csv')
+    player_22_df['work_rate'] = parse_work_rate(player_22_df['work_rate'])
 
-    # player_22_df.iloc[:, 0:10].info()
-    # player_22_df.iloc[:, 10:20].info()
-    # player_22_df.iloc[:, 20:30].info()
-    # player_22_df.iloc[:, 30:40].info()
-    # player_22_df.iloc[:, 40:50].info()
-    # player_22_df.iloc[:, 50:60].info()
-    # player_22_df.iloc[:, 60:70].info()
-    # player_22_df.iloc[:, 70:80].info()
-    # player_22_df.iloc[:, 80:90].info()
-    # player_22_df.iloc[:, 90:100].info()
-    #
-    # assert False
-
-    # initiate feature columns
-
+    # define line definitions and features we want to extract
     line_definitions = {"goal": ['GK'], "def": ['B'], "mid": ['M'], "att": ['CAM', 'CF', 'ST']}
 
     features_to_extract = {
@@ -192,9 +194,9 @@ if __name__ == '__main__':
                     for general_feat in features_to_extract['general']:
                         fixture_overview_df.loc[idx, f'{team}_{general_feat}_{line_key}'] = \
                             players_in_line[general_feat].sum()
+
                     # line specific features
                     if line_key == 'goal':
-                        # goalkeeping_diving,goalkeeping_handling,goalkeeping_kicking,goalkeeping_positioning,goalkeeping_reflexes,goalkeeping_speed
                         for goal_feat in features_to_extract['goal']:
                             fixture_overview_df.loc[idx, f'{team}_{goal_feat}_{line_key}'] = players_in_line[
                                 goal_feat].sum()
