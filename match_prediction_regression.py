@@ -14,10 +14,10 @@ def sign_penalty(y_true, y_pred):
     """Function that assigns a heavier weight to errors that fall into the wrong quandrant.
     For match outcome prediction it is most important that we predict the right sign, because this gets the most points.
     """
-    penalty = 2.
+    penalty = 5.
     loss = tf.where(tf.less(y_true * y_pred, 0),
-                    penalty * tf.square(y_true - y_pred),
-                    tf.square(y_true - y_pred))
+                    penalty * tf.abs(y_true - y_pred),
+                    tf.abs(y_true - y_pred))
 
     return tf.reduce_mean(loss, axis=-1)
 
@@ -37,18 +37,19 @@ def fit(model, X_train, y_train, X_val, y_val):
 
 
 def create_tensorflow_model_regressor(num_features):
+    """Compose tensorflow model."""
     inputs = tf.keras.Input(shape=(len(num_features),))
-    x = tf.keras.layers.Dense(512, activation=tf.nn.leaky_relu)(inputs)
+    x = tf.keras.layers.Dense(512, activation=tf.nn.relu)(inputs)
     x = tf.keras.layers.BatchNormalization()(x)
-    # x = tf.keras.layers.Dropout(0.1)(x)
-    x = tf.keras.layers.Dense(256, activation=tf.nn.leaky_relu)(x)
+    x = tf.keras.layers.Dense(256, activation=tf.nn.relu)(x)
     x = tf.keras.layers.BatchNormalization()(x)
-    x = tf.keras.layers.Dense(128, activation=tf.nn.leaky_relu)(x)
+    # x = tf.keras.layers.Dropout(0.01)(x)
+    x = tf.keras.layers.Dense(128, activation=tf.nn.relu)(x)
     x = tf.keras.layers.BatchNormalization()(x)
-    x = tf.keras.layers.Dense(64, activation=tf.nn.leaky_relu)(x)
+    x = tf.keras.layers.Dense(64, activation=tf.nn.relu)(x)
     x = tf.keras.layers.BatchNormalization()(x)
-    x = tf.keras.layers.Dense(16, activation=tf.nn.leaky_relu)(x)
-    outputs = tf.keras.layers.Dense(1)(x)
+    x = tf.keras.layers.Dense(16, activation=tf.nn.relu)(x)
+    outputs = tf.keras.layers.Dense(1, activation="linear")(x)
     model = tf.keras.Model(inputs=inputs, outputs=outputs)
     # print(model.summary())
 
@@ -62,12 +63,13 @@ def create_tensorflow_model_regressor(num_features):
 
     model.compile(loss=sign_penalty,
                   optimizer=optimizer,
-                  metrics=['mean_absolute_error'])
+                  metrics=['mae'])
 
     return model
 
 
 def plot_loss(history):
+    """Plot the loss over training."""
     plt.plot(history.history['loss'], label='loss')
     plt.plot(history.history['val_loss'], label='val_loss')
     plt.xlabel('Epoch')
@@ -77,8 +79,7 @@ def plot_loss(history):
     plt.show()
 
 def plot_predictions(true, preds, label=''):
-
-
+    """Plot the predicted value versus the real values."""
     fix, ax = plt.subplots()
     plt.title(f'{label}')
     plt.xlabel('True value')
@@ -99,6 +100,31 @@ def plot_predictions(true, preds, label=''):
 
     plt.grid(True)
     plt.show()
+
+def create_feature_names(line_definitions, features_to_use, features_to_extract):
+    # generate list of features to load from the prepped dataset
+    for line_key, item in line_definitions.items():
+        for team in teams:
+            # loop over the general features
+            for general_feat in features_to_extract['general']:
+                features_to_use.append(f'{team}_{general_feat}_{line_key}')
+
+            # line specific features
+            if line_key == 'goal':
+                # goalkeeping_diving,goalkeeping_handling,goalkeeping_kicking,goalkeeping_positioning,goalkeeping_reflexes,goalkeeping_speed
+                for goal_feat in features_to_extract['goal']:
+                    features_to_use.append(f'{team}_{goal_feat}_{line_key}')
+
+            if line_key == 'def':
+                for def_feat in features_to_extract['def']:
+                    features_to_use.append(f'{team}_{def_feat}_{line_key}')
+
+            if line_key == 'att':
+                for att_feat in features_to_extract['att']:
+                    features_to_use.append(f'{team}_{att_feat}_{line_key}')
+
+    return features_to_use
+
 
 if __name__ == '__main__':
     fixture_overview_df = pd.read_csv('prepped_data_set.csv')
@@ -129,32 +155,14 @@ if __name__ == '__main__':
 
     # list for the features and the base of features that are not player dependent
     features_to_use = ['national_game']
+    features_to_use = create_feature_names(line_definitions, features_to_use, features_to_extract)
 
-    # generate list of features to load from the prepped dataset
-    for line_key, item in line_definitions.items():
-        for team in teams:
-            # loop over the general features
-            for general_feat in features_to_extract['general']:
-                features_to_use.append(f'{team}_{general_feat}_{line_key}')
-
-            # line specific features
-            if line_key == 'goal':
-                # goalkeeping_diving,goalkeeping_handling,goalkeeping_kicking,goalkeeping_positioning,goalkeeping_reflexes,goalkeeping_speed
-                for goal_feat in features_to_extract['goal']:
-                    features_to_use.append(f'{team}_{goal_feat}_{line_key}')
-
-            if line_key == 'def':
-                for def_feat in features_to_extract['def']:
-                    features_to_use.append(f'{team}_{def_feat}_{line_key}')
-
-            if line_key == 'att':
-                for att_feat in features_to_extract['att']:
-                    features_to_use.append(f'{team}_{att_feat}_{line_key}')
+    # preprocess the data
+    scaled_X = preprocessing.RobustScaler().fit_transform(fixture_overview_df[features_to_use].values)
 
     # split data in to train, validation and test
     X_train, X_test, y_train, y_test = train_test_split(
-        preprocessing.StandardScaler().fit_transform(fixture_overview_df[features_to_use].values),
-        fixture_overview_df['team_victory'].values,
+        scaled_X, fixture_overview_df['team_victory'].values,
         test_size=0.2, random_state=0, shuffle=True)
 
     X_train, X_val, y_train, y_val = train_test_split(X_train, y_train,
@@ -177,5 +185,6 @@ if __name__ == '__main__':
     plot_predictions(y_test, test_pred, label='test')
     plot_predictions(y_train, train_pred, label='train')
 
+    # calculate the test and training scores
     print(f'Test score: {mean_absolute_error(y_test, test_pred)}')
     print(f'Train score: {mean_absolute_error(y_train, train_pred)}')
