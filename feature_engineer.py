@@ -156,7 +156,7 @@ if __name__ == '__main__':
                     'movement_balance',
                     'skill_dribbling', 'skill_curve', 'skill_fk_accuracy', 'skill_long_passing', 'skill_ball_control',
                     'mentality_aggression', 'mentality_interceptions', 'mentality_positioning', 'mentality_vision',
-                    'mentality_penalties', 'mentality_composure'],
+                    'mentality_penalties', 'mentality_composure', 'league_level', 'weak_foot', 'skill_moves'],
         'goal': ['goalkeeping_diving', 'goalkeeping_handling', 'goalkeeping_kicking',
                  'goalkeeping_positioning', 'goalkeeping_reflexes', 'goalkeeping_speed'],
         'def': ['defending_marking_awareness', 'defending_standing_tackle', 'defending_sliding_tackle'],
@@ -208,25 +208,25 @@ if __name__ == '__main__':
                     # loop over the general features
                     for general_feat in features_to_extract['general']:
                         fixture_overview_df.loc[idx, f'{team}_{general_feat}_{line_key}'] = \
-                            players_in_line[general_feat].sum()
+                            players_in_line[general_feat].sum() / len(players_in_line)
 
                     # line specific features
                     if line_key == 'goal':
                         for goal_feat in features_to_extract['goal']:
                             fixture_overview_df.loc[idx, f'{team}_{goal_feat}_{line_key}'] = players_in_line[
-                                goal_feat].sum()
+                                goal_feat].sum() / len(players_in_line)
                     if line_key == 'def':
                         for def_feat in features_to_extract['def']:
                             fixture_overview_df.loc[idx, f'{team}_{def_feat}_{line_key}'] = players_in_line[
-                                def_feat].sum()
+                                def_feat].sum() / len(players_in_line)
                     if line_key == 'att':
                         for att_feat in features_to_extract['att']:
                             fixture_overview_df.loc[idx, f'{team}_{att_feat}_{line_key}'] = players_in_line[
-                                att_feat].sum()
+                                att_feat].sum() / len(players_in_line)
 
-    all_composed_teams = set(sum([key for key, item in composed_teams.items()], []))
-    print(f'Team found for {len(all_composed_teams) / len(fixture_overview_df["HomeTeam"].unique()) * 100}% of the teams')
-    print(f'Uncomposed teams: {set(uncomposed_teams)}')
+    # all_composed_teams = set(sum([key for key, item in composed_teams.items()], []))
+    # print(f'Team found for {len(all_composed_teams) / len(fixture_overview_df["HomeTeam"].unique()) * 100}% of the teams')
+    # print(f'Uncomposed teams: {set(uncomposed_teams)}')
 
     fixture_overview_df.dropna(inplace=True)
 
