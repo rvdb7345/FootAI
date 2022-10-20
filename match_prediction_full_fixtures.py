@@ -7,7 +7,7 @@ from sklearn.metrics import mean_absolute_error
 import tensorflow as tf
 from sklearn import preprocessing
 
-MAX_EPOCHS = 1000
+MAX_EPOCHS = 10000
 
 
 def sign_penalty(y_true, y_pred):
@@ -22,14 +22,14 @@ def sign_penalty(y_true, y_pred):
     return tf.reduce_mean(loss, axis=-1)
 
 
-def fit(model, X_train, y_train, X_val, y_val):
+def fit(model, X_train, y_train, X_val, y_val, y_train_hscore, y_val_hscore, y_train_ascore, y_val_ascore):
     """Fit the model"""
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
                                                       patience=200,
                                                       mode='min')
 
-    history = model.fit(X_train, y_train, epochs=MAX_EPOCHS,
-                        validation_data=(X_val, y_val),
+    history = model.fit(X_train, [y_train, y_train_hscore, y_train_ascore], epochs=MAX_EPOCHS,
+                        validation_data=(X_val, [y_val, y_val_hscore, y_val_ascore]),
                         callbacks=[early_stopping],
                         batch_size=32)
     return history
@@ -50,9 +50,11 @@ def create_tensorflow_model_regressor(num_features):
     x = tf.keras.layers.Dense(64, activation=tf.nn.relu)(x)
     x = tf.keras.layers.BatchNormalization()(x)
     x = tf.keras.layers.Dense(32, activation=tf.nn.relu)(x)
-    outputs = tf.keras.layers.Dense(1, activation="linear")(x)
+    outputs_diff = tf.keras.layers.Dense(1, activation="linear", name='diff')(x)
+    outputs_hscore = tf.keras.layers.Dense(1, activation="linear", name='home')(outputs_diff)
+    outputs_ascore = tf.keras.layers.Dense(1, activation="linear", name='away')(outputs_diff)
 
-    model = tf.keras.Model(inputs=inputs, outputs=outputs)
+    model = tf.keras.Model(inputs=inputs, outputs=[outputs_diff, outputs_hscore, outputs_ascore])
     # print(model.summary())
 
     lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
@@ -134,8 +136,8 @@ if __name__ == '__main__':
     fixture_overview_df['team_victory'] = fixture_overview_df['HomeTeamScore'] - fixture_overview_df['AwayTeamScore']
 
     # cap large differences between matches to prevent overfitting on outliers
-    fixture_overview_df.loc[fixture_overview_df['team_victory'] > 4, 'team_victory'] = 4
-    fixture_overview_df.loc[fixture_overview_df['team_victory'] < -4, 'team_victory'] = -4
+    # fixture_overview_df.loc[fixture_overview_df['team_victory'] > 4, 'team_victory'] = 4
+    # fixture_overview_df.loc[fixture_overview_df['team_victory'] < -4, 'team_victory'] = -4
 
     # the features we want to use for out model
     features_to_extract = {
@@ -166,11 +168,14 @@ if __name__ == '__main__':
     scaled_X = preprocessing.RobustScaler().fit_transform(fixture_overview_df[features_to_use].values)
 
     # split data in to train, validation and test
-    X_train, X_test, y_train, y_test = train_test_split(
+    X_train, X_test, y_train, y_test, y_train_hscore, y_test_hscore, y_train_ascore, y_test_ascore = train_test_split(
         scaled_X, fixture_overview_df['team_victory'].values,
+        fixture_overview_df['HomeTeamScore'].values,
+        fixture_overview_df['AwayTeamScore'].values,
         test_size=0.2, random_state=0, shuffle=True)
 
-    X_train, X_val, y_train, y_val = train_test_split(X_train, y_train,
+    X_train, X_val, y_train, y_val, y_train_hscore, y_val_hscore, y_train_ascore, y_val_ascore = \
+        train_test_split(X_train, y_train, y_train_hscore, y_train_ascore,
                                                       test_size=0.2, random_state=0, shuffle=True)
 
     print(f'train length: {len(X_train)}')
@@ -181,15 +186,27 @@ if __name__ == '__main__':
     model = create_tensorflow_model_regressor(features_to_use)
 
     # fit the model and visualise the results
-    history = fit(model, X_train, y_train, X_val, y_val)
+    history = fit(model, X_train, y_train, X_val, y_val, y_train_hscore, y_val_hscore, y_train_ascore, y_val_ascore)
     plot_loss(history)
 
     # predict for the training and the test data and visualise the results
     test_pred = model.predict(X_test, verbose=0)
     train_pred = model.predict(X_train, verbose=0)
-    plot_predictions(y_test, test_pred, label='test')
-    plot_predictions(y_train, train_pred, label='train')
+    plot_predictions(y_test, test_pred[0], label='test_diff')
+    plot_predictions(y_train, train_pred[0], label='train_diff')
+
+    plot_predictions(y_test_hscore, test_pred[1], label='test_hscore')
+    plot_predictions(y_train_hscore, train_pred[1], label='train_hscore')
+
+    plot_predictions(y_test_ascore, test_pred[2], label='test_ascore')
+    plot_predictions(y_train_ascore, train_pred[2], label='train_ascore')
 
     # calculate the test and training scores
-    print(f'Test score: {mean_absolute_error(y_test, test_pred)}')
-    print(f'Train score: {mean_absolute_error(y_train, train_pred)}')
+    print(f'Test score diff: {mean_absolute_error(y_test, test_pred[0])}')
+    print(f'Train score diff: {mean_absolute_error(y_train, train_pred[0])}')
+
+    print(f'Test score home score: {mean_absolute_error(y_test_hscore, test_pred[1])}')
+    print(f'Train score home score: {mean_absolute_error(y_train_hscore, train_pred[1])}')
+
+    print(f'Test score away score: {mean_absolute_error(y_test_ascore, test_pred[2])}')
+    print(f'Train score away score: {mean_absolute_error(y_train_ascore, train_pred[2])}')
