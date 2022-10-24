@@ -18,7 +18,7 @@ def sign_penalty(y_true, y_pred):
     """Function that assigns a heavier weight to errors that fall into the wrong quandrant.
     For match outcome prediction it is most important that we predict the right sign, because this gets the most points.
     """
-    penalty = 5.
+    penalty = 30.
     loss = tf.where(tf.less(y_true * y_pred, 0),
                     penalty * tf.abs(y_true - y_pred),
                     tf.abs(y_true - y_pred))
@@ -47,25 +47,35 @@ def create_tensorflow_model_regressor(num_features):
 
     # home team
     x_home = tf.keras.layers.Dense(512, activation=tf.nn.relu)(inputs_1)
-    x_home = tf.keras.layers.BatchNormalization()(x_home)
     x_home = tf.keras.layers.Dense(256, activation=tf.nn.relu)(x_home)
     x_home = tf.keras.layers.BatchNormalization()(x_home)
     x_home = tf.keras.layers.Dense(128, activation=tf.nn.relu)(x_home)
+    x_home = tf.keras.layers.Dense(64, activation=tf.nn.relu)(x_home)
+    x_home = tf.keras.layers.Dense(32, activation=tf.nn.relu)(x_home)
     x_home = tf.keras.layers.BatchNormalization()(x_home)
 
     x_away = tf.keras.layers.Dense(512, activation=tf.nn.relu)(inputs_2)
-    x_away = tf.keras.layers.BatchNormalization()(x_away)
     x_away = tf.keras.layers.Dense(256, activation=tf.nn.relu)(x_away)
     x_away = tf.keras.layers.BatchNormalization()(x_away)
     x_away = tf.keras.layers.Dense(128, activation=tf.nn.relu)(x_away)
+    x_away = tf.keras.layers.Dense(64, activation=tf.nn.relu)(x_away)
+    x_away = tf.keras.layers.Dense(32, activation=tf.nn.relu)(x_away)
     x_away = tf.keras.layers.BatchNormalization()(x_away)
 
-    x = tf.keras.layers.Concatenate()([x_home, x_away])
+    x = tf.keras.layers.Subtract()([x_home, x_away])
+    x = tf.keras.layers.Activation('relu')(x)
 
     x = tf.keras.layers.Dense(256, activation=tf.nn.relu)(x)
+    x = tf.keras.layers.Dense(128, activation=tf.nn.relu)(x)
     x = tf.keras.layers.Dense(64, activation=tf.nn.relu)(x)
-    x = tf.keras.layers.BatchNormalization()(x)
     x = tf.keras.layers.Dense(32, activation=tf.nn.relu)(x)
+    x = tf.keras.layers.BatchNormalization()(x)
+    x = tf.keras.layers.Concatenate()([x, x_home, x_away])
+    x = tf.keras.layers.Dense(32, activation=tf.nn.relu)(x)
+    x = tf.keras.layers.Dense(32, activation=tf.nn.relu)(x)
+    x = tf.keras.layers.Dense(16, activation=tf.nn.relu)(x)
+
+
     outputs_reg = tf.keras.layers.Dense(1, activation="linear", name='diff')(x)
     outputs_class = tf.keras.layers.Dense(3, activation='softmax', name='win')(outputs_reg)
 
@@ -132,11 +142,12 @@ def create_feature_names(line_definitions, features_to_use, features_to_extract)
             if line_key == 'goal':
                 for goal_feat in features_to_extract['goal']:
                     features_to_use.append(f'{team}_{goal_feat}_{line_key}')
-
+            if line_key == 'field':
+                for field_feat in features_to_extract['field']:
+                    features_to_use.append(f'{team}_{field_feat}_{line_key}')
             if line_key == 'def':
                 for def_feat in features_to_extract['def']:
                     features_to_use.append(f'{team}_{def_feat}_{line_key}')
-
             if line_key == 'att':
                 for att_feat in features_to_extract['att']:
                     features_to_use.append(f'{team}_{att_feat}_{line_key}')
@@ -166,13 +177,13 @@ if __name__ == '__main__':
     # the features we want to use for out model
     features_to_extract = {
         'general': ['value_eur', 'potential', 'overall', 'work_rate', 'international_reputation', 'age', 'height_cm',
-                    'weight_kg', 'pace', 'shooting', 'passing', 'dribbling', 'defending', 'physic',
+                    'weight_kg', 'shooting', 'passing', 'defending', 'physic',
                     'power_shot_power', 'power_jumping', 'power_stamina', 'power_strength', 'power_long_shots',
-                    'movement_acceleration', 'movement_sprint_speed', 'movement_agility', 'movement_reactions',
-                    'movement_balance',
-                    'skill_dribbling', 'skill_curve', 'skill_fk_accuracy', 'skill_long_passing', 'skill_ball_control',
-                    'mentality_aggression', 'mentality_interceptions', 'mentality_positioning', 'mentality_vision',
-                    'mentality_penalties', 'mentality_composure'],
+                    'mentality_interceptions', 'mentality_positioning', 'mentality_vision',
+                    'mentality_penalties', 'mentality_composure', 'league_level'],
+        'field': ['skill_dribbling', 'skill_curve', 'skill_fk_accuracy', 'skill_long_passing', 'skill_ball_control',
+                  'mentality_aggression', 'pace', 'dribbling', 'movement_acceleration', 'movement_sprint_speed',
+                  'movement_agility', 'movement_reactions', 'movement_balance', 'weak_foot', 'skill_moves'],
         'goal': ['goalkeeping_diving', 'goalkeeping_handling', 'goalkeeping_kicking',
                  'goalkeeping_positioning', 'goalkeeping_reflexes', 'goalkeeping_speed'],
         'def': ['defending_marking_awareness', 'defending_standing_tackle', 'defending_sliding_tackle'],
@@ -181,7 +192,8 @@ if __name__ == '__main__':
     }
 
     # the different positions and teams
-    line_definitions = {"goal": ['GK'], "def": ['B'], "mid": ['M'], "att": ['CAM', 'CF', 'ST']}
+    line_definitions = {"goal": ['GK'], "def": ['B'], "mid": ['M'], "att": ['CAM', 'CF', 'ST'],
+                        "field": ['B', 'M', 'CAM', 'CF', 'ST']}
     teams = ['home_team', 'away_team']
 
     # list for the features and the base of features that are not player dependent
@@ -193,6 +205,9 @@ if __name__ == '__main__':
     # preprocess the data
     scaled_X_home = preprocessing.RobustScaler().fit_transform(fixture_overview_df[features_to_use_home].values)
     scaled_X_away = preprocessing.RobustScaler().fit_transform(fixture_overview_df[features_to_use_away].values)
+
+    scaled_X_home = preprocessing.minmax_scale(scaled_X_home)
+    scaled_X_away = preprocessing.minmax_scale(scaled_X_away)
 
     one_hot_y_train = np.zeros((fixture_overview_df['team_victory'].values.size, fixture_overview_df['team_victory'].values.max() + 1))
     one_hot_y_train[np.arange(fixture_overview_df['team_victory'].values.size), fixture_overview_df['team_victory'].values] = 1
@@ -238,3 +253,6 @@ if __name__ == '__main__':
 
     print(f'Test score: {accuracy_score(np.argmax(y_test_class, axis=1), test_pred_class)}')
     print(f'Train score: {accuracy_score(np.argmax(y_train_class, axis=1), train_pred_class)}')
+
+    model.save(f'two_input_model_{mean_absolute_error(y_test_reg, test_pred_reg)}.csv')
+

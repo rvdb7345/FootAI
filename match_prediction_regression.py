@@ -6,8 +6,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error
 import tensorflow as tf
 from sklearn import preprocessing
+import pickle
 
-MAX_EPOCHS = 1000
+MAX_EPOCHS = 4000
 
 
 def sign_penalty(y_true, y_pred):
@@ -41,10 +42,10 @@ def create_tensorflow_model_regressor(num_features):
     inputs = tf.keras.Input(shape=(len(num_features),))
     x = tf.keras.layers.Dense(1024, activation=tf.nn.relu)(inputs)
     x = tf.keras.layers.BatchNormalization()(x)
-    x = tf.keras.layers.Dropout(0.2)(x)
+    x = tf.keras.layers.Dropout(0.1)(x)
     x = tf.keras.layers.Dense(512, activation=tf.nn.relu)(x)
     x = tf.keras.layers.BatchNormalization()(x)
-    x = tf.keras.layers.Dropout(0.2)(x)
+    x = tf.keras.layers.Dropout(0.1)(x)
     x = tf.keras.layers.Dense(256, activation=tf.nn.relu)(x)
     x = tf.keras.layers.BatchNormalization()(x)
     x = tf.keras.layers.Dense(64, activation=tf.nn.relu)(x)
@@ -53,7 +54,6 @@ def create_tensorflow_model_regressor(num_features):
     outputs = tf.keras.layers.Dense(1, activation="linear")(x)
 
     model = tf.keras.Model(inputs=inputs, outputs=outputs)
-    # print(model.summary())
 
     lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
         initial_learning_rate=1e-2,
@@ -103,7 +103,7 @@ def plot_predictions(true, preds, label=''):
     plt.grid(True)
     plt.show()
 
-def create_feature_names(line_definitions, features_to_use, features_to_extract):
+def create_feature_names(line_definitions, features_to_use, features_to_extract, teams):
     # generate list of features to load from the prepped dataset
     for line_key, item in line_definitions.items():
         for team in teams:
@@ -115,21 +115,19 @@ def create_feature_names(line_definitions, features_to_use, features_to_extract)
             if line_key == 'goal':
                 for goal_feat in features_to_extract['goal']:
                     features_to_use.append(f'{team}_{goal_feat}_{line_key}')
-
+            if line_key == 'field':
+                for field_feat in features_to_extract['field']:
+                    features_to_use.append(f'{team}_{field_feat}_{line_key}')
             if line_key == 'def':
                 for def_feat in features_to_extract['def']:
                     features_to_use.append(f'{team}_{def_feat}_{line_key}')
-
             if line_key == 'att':
                 for att_feat in features_to_extract['att']:
                     features_to_use.append(f'{team}_{att_feat}_{line_key}')
 
     return features_to_use
 
-
-if __name__ == '__main__':
-    fixture_overview_df = pd.read_csv('prepped_data_set.csv')
-
+def create_predictable(fixture_overview_df):
     # add predictable
     fixture_overview_df['team_victory'] = fixture_overview_df['HomeTeamScore'] - fixture_overview_df['AwayTeamScore']
 
@@ -137,16 +135,28 @@ if __name__ == '__main__':
     fixture_overview_df.loc[fixture_overview_df['team_victory'] > 4, 'team_victory'] = 4
     fixture_overview_df.loc[fixture_overview_df['team_victory'] < -4, 'team_victory'] = -4
 
-    # the features we want to use for out model
+    return fixture_overview_df
+
+
+
+if __name__ == '__main__':
+    fixture_overview_df = pd.read_csv('prepped_data_set.csv')
+    fixture_overview_df = create_predictable(fixture_overview_df)
+
+
+    # define line definitions and features we want to extract (field is every position excl. goalkeeper)
+    line_definitions = {"goal": ['GK'], "def": ['B'], "mid": ['M'], "att": ['CAM', 'CF', 'ST'],
+                        "field": ['B', 'M', 'CAM', 'CF', 'ST']}
+
     features_to_extract = {
         'general': ['value_eur', 'potential', 'overall', 'work_rate', 'international_reputation', 'age', 'height_cm',
-                    'weight_kg', 'pace', 'shooting', 'passing', 'dribbling', 'defending', 'physic',
+                    'weight_kg', 'shooting', 'passing', 'defending', 'physic',
                     'power_shot_power', 'power_jumping', 'power_stamina', 'power_strength', 'power_long_shots',
-                    'movement_acceleration', 'movement_sprint_speed', 'movement_agility', 'movement_reactions',
-                    'movement_balance',
-                    'skill_dribbling', 'skill_curve', 'skill_fk_accuracy', 'skill_long_passing', 'skill_ball_control',
-                    'mentality_aggression', 'mentality_interceptions', 'mentality_positioning', 'mentality_vision',
-                    'mentality_penalties', 'mentality_composure'],
+                    'mentality_interceptions', 'mentality_positioning', 'mentality_vision',
+                    'mentality_penalties', 'mentality_composure', 'league_level'],
+        'field': ['skill_dribbling', 'skill_curve', 'skill_fk_accuracy', 'skill_long_passing', 'skill_ball_control',
+                  'mentality_aggression', 'pace', 'dribbling', 'movement_acceleration', 'movement_sprint_speed',
+                  'movement_agility', 'movement_reactions', 'movement_balance', 'weak_foot', 'skill_moves'],
         'goal': ['goalkeeping_diving', 'goalkeeping_handling', 'goalkeeping_kicking',
                  'goalkeeping_positioning', 'goalkeeping_reflexes', 'goalkeeping_speed'],
         'def': ['defending_marking_awareness', 'defending_standing_tackle', 'defending_sliding_tackle'],
@@ -155,23 +165,26 @@ if __name__ == '__main__':
     }
 
     # the different positions and teams
-    line_definitions = {"goal": ['GK'], "def": ['B'], "mid": ['M'], "att": ['CAM', 'CF', 'ST']}
     teams = ['home_team', 'away_team', 'rel']
 
     # list for the features and the base of features that are not player dependent
     features_to_use = ['national_game']
-    features_to_use = create_feature_names(line_definitions, features_to_use, features_to_extract)
+    features_to_use = create_feature_names(line_definitions, features_to_use, features_to_extract, teams)
 
     # preprocess the data
-    scaled_X = preprocessing.RobustScaler().fit_transform(fixture_overview_df[features_to_use].values)
+    fitted_scaler = preprocessing.RobustScaler()
+    fitted_scaler.fit(fixture_overview_df[features_to_use].values)
+    scaled_X = fitted_scaler.transform(fixture_overview_df[features_to_use].values)
+
+    pickle.dump(fitted_scaler, open('scaler.pkl', 'wb'))
 
     # split data in to train, validation and test
     X_train, X_test, y_train, y_test = train_test_split(
         scaled_X, fixture_overview_df['team_victory'].values,
-        test_size=0.2, random_state=0, shuffle=True)
+        test_size=0.2, random_state=42, shuffle=True)
 
     X_train, X_val, y_train, y_val = train_test_split(X_train, y_train,
-                                                      test_size=0.2, random_state=0, shuffle=True)
+                                                      test_size=0.2, random_state=42, shuffle=True)
 
     print(f'train length: {len(X_train)}')
     print(f'val length: {len(X_val)}')
@@ -193,3 +206,5 @@ if __name__ == '__main__':
     # calculate the test and training scores
     print(f'Test score: {mean_absolute_error(y_test, test_pred)}')
     print(f'Train score: {mean_absolute_error(y_train, train_pred)}')
+
+    model.save(f'regression_model_{mean_absolute_error(y_test, test_pred)}.csv')

@@ -77,7 +77,7 @@ def get_best_lineup(lineup_df, formation='', measurement=''):
     return formation, composed_squad
 
 
-def compose_best_squad(team, player_df):
+def compose_best_squad(team, player_df, row):
     """Compose the best possible team based on the available players."""
     all_potential_players_in_team = load_players_per_team(team, player_df, row['national_game'])
 
@@ -139,24 +139,30 @@ def load_all_different_player_data():
     return player_data
 
 
-if __name__ == '__main__':
-    fixture_overview_df = pd.read_csv('prepped_data_sources/prepped_fixture_overview.csv')
+def engineer_features(pred_df=None):
+
+    if pred_df is None:
+        fixture_overview_df = pd.read_csv('prepped_data_sources/prepped_fixture_overview.csv')
+    else:
+        fixture_overview_df = pred_df
+
     player_data = load_all_different_player_data()
     for key in player_data:
         player_data[key]['work_rate'] = parse_work_rate(player_data[key]['work_rate'])
 
-    # define line definitions and features we want to extract
-    line_definitions = {"goal": ['GK'], "def": ['B'], "mid": ['M'], "att": ['CAM', 'CF', 'ST']}
+    # define line definitions and features we want to extract (field is every position excl. goalkeeper)
+    line_definitions = {"goal": ['GK'], "def": ['B'], "mid": ['M'], "att": ['CAM', 'CF', 'ST'],
+                        "field": ['B', 'M', 'CAM', 'CF', 'ST']}
 
     features_to_extract = {
         'general': ['value_eur', 'potential', 'overall', 'work_rate', 'international_reputation', 'age', 'height_cm',
-                    'weight_kg', 'pace', 'shooting', 'passing', 'dribbling', 'defending', 'physic',
+                    'weight_kg', 'shooting', 'passing', 'defending', 'physic',
                     'power_shot_power', 'power_jumping', 'power_stamina', 'power_strength', 'power_long_shots',
-                    'movement_acceleration', 'movement_sprint_speed', 'movement_agility', 'movement_reactions',
-                    'movement_balance',
-                    'skill_dribbling', 'skill_curve', 'skill_fk_accuracy', 'skill_long_passing', 'skill_ball_control',
-                    'mentality_aggression', 'mentality_interceptions', 'mentality_positioning', 'mentality_vision',
-                    'mentality_penalties', 'mentality_composure', 'league_level', 'weak_foot', 'skill_moves'],
+                    'mentality_interceptions', 'mentality_positioning', 'mentality_vision',
+                    'mentality_penalties', 'mentality_composure', 'league_level'],
+        'field': ['skill_dribbling', 'skill_curve', 'skill_fk_accuracy', 'skill_long_passing', 'skill_ball_control',
+                  'mentality_aggression', 'pace', 'dribbling', 'movement_acceleration', 'movement_sprint_speed',
+                  'movement_agility', 'movement_reactions', 'movement_balance', 'weak_foot', 'skill_moves'],
         'goal': ['goalkeeping_diving', 'goalkeeping_handling', 'goalkeeping_kicking',
                  'goalkeeping_positioning', 'goalkeeping_reflexes', 'goalkeeping_speed'],
         'def': ['defending_marking_awareness', 'defending_standing_tackle', 'defending_sliding_tackle'],
@@ -177,7 +183,7 @@ if __name__ == '__main__':
 
         # obtain best home and away teams
         if hometeam not in composed_teams[year].keys():
-            best_home_team = compose_best_squad(hometeam, player_df=player_data[year])
+            best_home_team = compose_best_squad(hometeam, player_df=player_data[year], row=row)
             if best_home_team is not None:
                 composed_teams[year][hometeam] = best_home_team
             else:
@@ -186,7 +192,7 @@ if __name__ == '__main__':
             best_home_team = composed_teams[year][hometeam]
 
         if awayteam not in composed_teams[year].keys():
-            best_away_team = compose_best_squad(awayteam, player_df=player_data[year])
+            best_away_team = compose_best_squad(awayteam, player_df=player_data[year], row=row)
             if best_away_team is not None:
                 composed_teams[year][awayteam] = best_away_team
             else:
@@ -211,24 +217,37 @@ if __name__ == '__main__':
                             players_in_line[general_feat].sum() / len(players_in_line)
 
                     # line specific features
+                    if line_key == 'field':
+                        for field_feat in features_to_extract['field']:
+                            fixture_overview_df.loc[idx, f'{team}_{field_feat}_{line_key}'] = players_in_line[
+                                                                                                  field_feat].sum() / len(
+                                players_in_line)
                     if line_key == 'goal':
                         for goal_feat in features_to_extract['goal']:
                             fixture_overview_df.loc[idx, f'{team}_{goal_feat}_{line_key}'] = players_in_line[
-                                goal_feat].sum() / len(players_in_line)
+                                                                                                 goal_feat].sum() / len(
+                                players_in_line)
                     if line_key == 'def':
                         for def_feat in features_to_extract['def']:
                             fixture_overview_df.loc[idx, f'{team}_{def_feat}_{line_key}'] = players_in_line[
-                                def_feat].sum() / len(players_in_line)
+                                                                                                def_feat].sum() / len(
+                                players_in_line)
                     if line_key == 'att':
                         for att_feat in features_to_extract['att']:
                             fixture_overview_df.loc[idx, f'{team}_{att_feat}_{line_key}'] = players_in_line[
-                                att_feat].sum() / len(players_in_line)
+                                                                                                att_feat].sum() / len(
+                                players_in_line)
 
                 for general_feat in features_to_extract['general']:
                     fixture_overview_df.loc[idx, f'rel_{general_feat}_{line_key}'] = \
                         fixture_overview_df.loc[idx, f'home_team_{general_feat}_{line_key}'] - \
                         fixture_overview_df.loc[idx, f'away_team_{general_feat}_{line_key}']
 
+                if line_key == 'field':
+                    for field_feat in features_to_extract['field']:
+                        fixture_overview_df.loc[idx, f'rel_{field_feat}_{line_key}'] = \
+                            fixture_overview_df.loc[idx, f'home_team_{field_feat}_{line_key}'] - \
+                            fixture_overview_df.loc[idx, f'away_team_{field_feat}_{line_key}']
                 if line_key == 'goal':
                     for goal_feat in features_to_extract['goal']:
                         fixture_overview_df.loc[idx, f'rel_{goal_feat}_{line_key}'] = \
@@ -245,10 +264,18 @@ if __name__ == '__main__':
                             fixture_overview_df.loc[idx, f'home_team_{att_feat}_{line_key}'] - \
                             fixture_overview_df.loc[idx, f'away_team_{att_feat}_{line_key}']
 
+    fixture_overview_df.dropna(inplace=True)
+
+    return fixture_overview_df
+
+
+if __name__ == '__main__':
+
+
     # all_composed_teams = set(sum([key for key, item in composed_teams.items()], []))
     # print(f'Team found for {len(all_composed_teams) / len(fixture_overview_df["HomeTeam"].unique()) * 100}% of the teams')
     # print(f'Uncomposed teams: {set(uncomposed_teams)}')
 
-    fixture_overview_df.dropna(inplace=True)
+    fixture_overview_df = engineer_features()
 
     fixture_overview_df.to_csv('prepped_data_set.csv')

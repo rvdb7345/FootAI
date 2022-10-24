@@ -60,7 +60,7 @@ def create_tensorflow_model_regressor(num_features):
     lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
         initial_learning_rate=1e-2,
         decay_steps=20000,
-        decay_rate=0.9)
+        decay_rate=0.95)
     optimizer = tf.keras.optimizers.SGD(learning_rate=lr_schedule)
 
     tf.keras.losses.sign_penalty = sign_penalty
@@ -117,11 +117,12 @@ def create_feature_names(line_definitions, features_to_use, features_to_extract)
             if line_key == 'goal':
                 for goal_feat in features_to_extract['goal']:
                     features_to_use.append(f'{team}_{goal_feat}_{line_key}')
-
+            if line_key == 'field':
+                for field_feat in features_to_extract['field']:
+                    features_to_use.append(f'{team}_{field_feat}_{line_key}')
             if line_key == 'def':
                 for def_feat in features_to_extract['def']:
                     features_to_use.append(f'{team}_{def_feat}_{line_key}')
-
             if line_key == 'att':
                 for att_feat in features_to_extract['att']:
                     features_to_use.append(f'{team}_{att_feat}_{line_key}')
@@ -142,13 +143,13 @@ if __name__ == '__main__':
     # the features we want to use for out model
     features_to_extract = {
         'general': ['value_eur', 'potential', 'overall', 'work_rate', 'international_reputation', 'age', 'height_cm',
-                    'weight_kg', 'pace', 'shooting', 'passing', 'dribbling', 'defending', 'physic',
+                    'weight_kg', 'shooting', 'passing', 'defending', 'physic',
                     'power_shot_power', 'power_jumping', 'power_stamina', 'power_strength', 'power_long_shots',
-                    'movement_acceleration', 'movement_sprint_speed', 'movement_agility', 'movement_reactions',
-                    'movement_balance',
-                    'skill_dribbling', 'skill_curve', 'skill_fk_accuracy', 'skill_long_passing', 'skill_ball_control',
-                    'mentality_aggression', 'mentality_interceptions', 'mentality_positioning', 'mentality_vision',
-                    'mentality_penalties', 'mentality_composure'],
+                    'mentality_interceptions', 'mentality_positioning', 'mentality_vision',
+                    'mentality_penalties', 'mentality_composure', 'league_level'],
+        'field': ['skill_dribbling', 'skill_curve', 'skill_fk_accuracy', 'skill_long_passing', 'skill_ball_control',
+                  'mentality_aggression', 'pace', 'dribbling', 'movement_acceleration', 'movement_sprint_speed',
+                  'movement_agility', 'movement_reactions', 'movement_balance', 'weak_foot', 'skill_moves'],
         'goal': ['goalkeeping_diving', 'goalkeeping_handling', 'goalkeeping_kicking',
                  'goalkeeping_positioning', 'goalkeeping_reflexes', 'goalkeeping_speed'],
         'def': ['defending_marking_awareness', 'defending_standing_tackle', 'defending_sliding_tackle'],
@@ -157,7 +158,8 @@ if __name__ == '__main__':
     }
 
     # the different positions and teams
-    line_definitions = {"goal": ['GK'], "def": ['B'], "mid": ['M'], "att": ['CAM', 'CF', 'ST']}
+    line_definitions = {"goal": ['GK'], "def": ['B'], "mid": ['M'], "att": ['CAM', 'CF', 'ST'],
+                        "field": ['B', 'M', 'CAM', 'CF', 'ST']}
     teams = ['home_team', 'away_team', 'rel']
 
     # list for the features and the base of features that are not player dependent
