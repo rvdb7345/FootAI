@@ -5,7 +5,7 @@ from match_prediction_regression import sign_penalty, create_feature_names
 import pickle
 
 if __name__ == '__main__':
-    # matches_to_predict = pd.DataFrame({"HomeTeam": 'Ajax', 'AwayTeam': "Napoli", "Year": 2022, "national_game": 0}, index=[0])
+    # matches_to_predict = pd.DataFrame({"HomeTeam": 'Arsenal', 'AwayTeam': "", "Year": 2022, "national_game": 0}, index=[0])
 
     matches_to_predict = pd.read_csv('fifa-world-cup-2022-UTC.csv')
     matches_to_predict['national_game'] = 1
@@ -50,9 +50,12 @@ if __name__ == '__main__':
     features_to_use = ['national_game']
     features_to_use = create_feature_names(line_definitions, features_to_use, features_to_extract, teams)
 
-    predict_data = scaler.transform(engineered_df.loc[:,features_to_use].values)
+    predict_data = scaler.transform(engineered_df.loc[:, features_to_use].values)
 
     goal_diffs = model.predict(predict_data)
-    print(goal_diffs)
+
+    matches_to_predict['goal_difference'] = goal_diffs
+    matches_to_predict['rounded_diff'] = matches_to_predict['goal_difference'].apply(lambda x: round(x))
+    print(matches_to_predict[['HomeTeam', 'AwayTeam', 'goal_difference', 'rounded_diff']])
 
 

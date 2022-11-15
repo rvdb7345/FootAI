@@ -143,6 +143,8 @@ def engineer_features(pred_df=None):
 
     if pred_df is None:
         fixture_overview_df = pd.read_csv('prepped_data_sources/prepped_fixture_overview.csv')
+        int_fixture_overview_df = pd.read_csv('prepped_data_sources/fixture_overview_international.csv')
+        fixture_overview_df = fixture_overview_df.append(int_fixture_overview_df)
     else:
         fixture_overview_df = pred_df
 
@@ -266,16 +268,13 @@ def engineer_features(pred_df=None):
 
     fixture_overview_df.dropna(inplace=True)
 
+    print(f'Uncomposed teams: {uncomposed_teams}')
+
     return fixture_overview_df
 
 
 if __name__ == '__main__':
 
-
-    # all_composed_teams = set(sum([key for key, item in composed_teams.items()], []))
-    # print(f'Team found for {len(all_composed_teams) / len(fixture_overview_df["HomeTeam"].unique()) * 100}% of the teams')
-    # print(f'Uncomposed teams: {set(uncomposed_teams)}')
-
     fixture_overview_df = engineer_features()
 
-    fixture_overview_df.to_csv('prepped_data_set.csv')
+    fixture_overview_df.to_csv('prepped_data_sources/int_prepped_data_set.csv')

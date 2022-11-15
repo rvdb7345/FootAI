@@ -131,7 +131,7 @@ def create_feature_names(line_definitions, features_to_use, features_to_extract)
 
 
 if __name__ == '__main__':
-    fixture_overview_df = pd.read_csv('prepped_data_set.csv')
+    fixture_overview_df = pd.read_csv('prepped_data_sources/prepped_data_set.csv')
 
     # add predictable
     fixture_overview_df['team_victory'] = fixture_overview_df['HomeTeamScore'] - fixture_overview_df['AwayTeamScore']

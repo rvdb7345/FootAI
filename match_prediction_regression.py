@@ -27,7 +27,8 @@ def fit(model, X_train, y_train, X_val, y_val):
     """Fit the model"""
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
                                                       patience=200,
-                                                      mode='min')
+                                                      mode='min',
+                                                      restore_best_weights=True)
 
     history = model.fit(X_train, y_train, epochs=MAX_EPOCHS,
                         validation_data=(X_val, y_val),
@@ -40,17 +41,17 @@ def fit(model, X_train, y_train, X_val, y_val):
 def create_tensorflow_model_regressor(num_features):
     """Compose tensorflow model."""
     inputs = tf.keras.Input(shape=(len(num_features),))
-    x = tf.keras.layers.Dense(1024, activation=tf.nn.relu)(inputs)
+    # x = tf.keras.layers.Dropout(0.2)(inputs)
+    x = tf.keras.layers.Dense(512, activation=tf.nn.relu)(inputs)
     x = tf.keras.layers.BatchNormalization()(x)
-    x = tf.keras.layers.Dropout(0.1)(x)
-    x = tf.keras.layers.Dense(512, activation=tf.nn.relu)(x)
-    x = tf.keras.layers.BatchNormalization()(x)
-    x = tf.keras.layers.Dropout(0.1)(x)
+    x = tf.keras.layers.Dropout(0.2)(x)
     x = tf.keras.layers.Dense(256, activation=tf.nn.relu)(x)
     x = tf.keras.layers.BatchNormalization()(x)
     x = tf.keras.layers.Dense(64, activation=tf.nn.relu)(x)
     x = tf.keras.layers.BatchNormalization()(x)
     x = tf.keras.layers.Dense(32, activation=tf.nn.relu)(x)
+    x = tf.keras.layers.BatchNormalization()(x)
+    x = tf.keras.layers.Dense(16, activation=tf.nn.relu)(x)
     outputs = tf.keras.layers.Dense(1, activation="linear")(x)
 
     model = tf.keras.Model(inputs=inputs, outputs=outputs)
@@ -132,15 +133,17 @@ def create_predictable(fixture_overview_df):
     fixture_overview_df['team_victory'] = fixture_overview_df['HomeTeamScore'] - fixture_overview_df['AwayTeamScore']
 
     # cap large differences between matches to prevent overfitting on outliers
-    fixture_overview_df.loc[fixture_overview_df['team_victory'] > 4, 'team_victory'] = 4
-    fixture_overview_df.loc[fixture_overview_df['team_victory'] < -4, 'team_victory'] = -4
+    fixture_overview_df.loc[fixture_overview_df['team_victory'] > 3, 'team_victory'] = 3
+    fixture_overview_df.loc[fixture_overview_df['team_victory'] < -3, 'team_victory'] = -3
 
     return fixture_overview_df
 
 
 
 if __name__ == '__main__':
-    fixture_overview_df = pd.read_csv('prepped_data_set.csv')
+    experiment_name = 'rel'
+
+    fixture_overview_df = pd.read_csv('prepped_data_sources/prepped_data_set.csv')
     fixture_overview_df = create_predictable(fixture_overview_df)
 
 
@@ -165,18 +168,22 @@ if __name__ == '__main__':
     }
 
     # the different positions and teams
-    teams = ['home_team', 'away_team', 'rel']
+    # teams = ['home_team', 'away_team', 'rel']
+    teams = ['rel']
+
 
     # list for the features and the base of features that are not player dependent
     features_to_use = ['national_game']
     features_to_use = create_feature_names(line_definitions, features_to_use, features_to_extract, teams)
+
+    # print(fixture_overview_df[features_to_use + ['team_victory']].corr()['team_victory'].sort_values(ascending=False)[0:30])
 
     # preprocess the data
     fitted_scaler = preprocessing.RobustScaler()
     fitted_scaler.fit(fixture_overview_df[features_to_use].values)
     scaled_X = fitted_scaler.transform(fixture_overview_df[features_to_use].values)
 
-    pickle.dump(fitted_scaler, open('scaler.pkl', 'wb'))
+    pickle.dump(fitted_scaler, open(f'{experiment_name}_scaler.pkl', 'wb'))
 
     # split data in to train, validation and test
     X_train, X_test, y_train, y_test = train_test_split(
@@ -207,4 +214,4 @@ if __name__ == '__main__':
     print(f'Test score: {mean_absolute_error(y_test, test_pred)}')
     print(f'Train score: {mean_absolute_error(y_train, train_pred)}')
 
-    model.save(f'regression_model_{mean_absolute_error(y_test, test_pred)}.csv')
+    model.save(f'{experiment_name}_regression_model_{mean_absolute_error(y_test, test_pred)}')

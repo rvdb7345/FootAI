@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 
 if __name__ == '__main__':
 
-    fixture_overview_df = pd.read_csv('prepped_data_set.csv')
+    fixture_overview_df = pd.read_csv('prepped_data_sources/prepped_data_set.csv')
     fixture_overview_df = create_predictable(fixture_overview_df)
 
     # define line definitions and features we want to extract (field is every position excl. goalkeeper)
