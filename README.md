@@ -10,6 +10,15 @@ However, solutions are also included for predicting the total end result.
 
 The SHAP explaining is still in developmental phase and is not correctly functional (`shap_explaining.py`)
 
+<div align="center">
+[![GitHub release](https://img.shields.io/github/release/rvdb7345/FootAI?include_prereleases=&sort=semver&color=blue)](https://github.com/rvdb7345/FootAI/releases/)
+[![License](https://img.shields.io/badge/License-MIT-blue)](#license)
+[![issues - FootAI](https://img.shields.io/github/issues/rvdb7345/FootAI)](https://github.com/rvdb7345/FootAI/issues)
+[![rvdb7345 - FootAI](https://img.shields.io/static/v1?label=rvdb7345&message=FootAI&color=blue&logo=github)](https://github.com/rvdb7345/FootAI "Go to GitHub repo")
+[![stars - FootAI](https://img.shields.io/github/stars/rvdb7345/FootAI?style=social)](https://github.com/rvdb7345/FootAI)
+[![forks - FootAI](https://img.shields.io/github/forks/rvdb7345/FootAI?style=social)](https://github.com/rvdb7345/FootAI)
+</div>
+
 ## What part of the prediction process is covered here?
 Thought the scripts in this repo, the following functionalities are implemented in the corresponding files:
 - Scraping historic fixture data (`collect_fixtures.py`)
