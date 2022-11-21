@@ -6,6 +6,7 @@ import os
 
 import pandas as pd
 
+
 def convert_json_to_csv(matches):
     """Convert json to csv and sanitise."""
 
@@ -29,13 +30,16 @@ def convert_json_to_csv(matches):
 def flatten(l):
     return [item for sublist in l for item in sublist]
 
+
 def merge_same_league_year_games(competition, list_of_files, json_location):
     """Merge jsons from the same league and the same year so that they can be filtered out."""
 
-    files_in_same_competition = [json.load(open(json_location + '/' + file_path)) for file_path in list_of_files if competition in file_path]
+    files_in_same_competition = [json.load(open(json_location + '/' + file_path)) for file_path in list_of_files if
+                                 competition in file_path]
     files_in_same_competition = flatten(files_in_same_competition)
 
     return files_in_same_competition
+
 
 def process_all_jsons_to_rdb(json_location, save_location):
     """
@@ -65,7 +69,3 @@ def process_all_jsons_to_rdb(json_location, save_location):
 
 if __name__ == '__main__':
     process_all_jsons_to_rdb('fixtures', 'fixture_overview.csv')
-
-
-
-

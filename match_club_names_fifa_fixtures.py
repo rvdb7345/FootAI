@@ -45,7 +45,7 @@ def create_fixture_to_fifa_club_mapping(fixture_df, players_22_df, all_country_n
 
         # check if the club name was a country
         if unmatched_club_name in all_country_names:
-            list_of_countries_in_fixtures.append(unmatched_club_name)
+                list_of_countries_in_fixtures.append(unmatched_club_name)
         elif unmatched_club_name in club_fixture_to_fifa_mapping.keys():
             continue
         else:
@@ -70,11 +70,11 @@ def create_fixture_to_fifa_club_mapping(fixture_df, players_22_df, all_country_n
 if __name__ == '__main__':
 
     # load all necessary data
-    all_country_names_df = pd.read_csv('all_countries.csv')
+    all_country_names_df = pd.read_csv('data/all_countries.csv')
     all_country_names = all_country_names_df['Name'].to_list()
 
     players_22_df = pd.read_csv('fifa_player_data/players_22.csv')
-    fixture_df = pd.read_csv('fixture_overview.csv')
+    fixture_df = pd.read_csv('data/fixture_overview.csv')
 
     # find mapping for club names in fixture that are not in fifa player list
     mapping, list_of_countries_in_fixtures = \

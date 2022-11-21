@@ -1,3 +1,7 @@
+"""This file contains all the code used for engineering features from FIFA player data for a dataset of specified
+matches.
+"""
+
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
@@ -6,13 +10,13 @@ formations_dict = {
     '4-3-1-2': ['GK', 'RB|RWB', 'LCB|CB', 'RCB|CB', 'LB|LWB', 'CDM|CM', 'CDM|CM', 'CDM|CM', 'CAM|CF', 'CF|ST', 'CF|ST'],
     '4-3-2-1': ['GK', 'RB|RWB', 'LCB|CB', 'RCB|CB', 'LB|LWB', 'CDM|CM', 'CDM|CM', 'CDM|CM', 'CAM|CF', 'CAM|CF',
                 'CF|ST'],
-    '4-3-3':   ['GK', 'RB|RWB', 'LCB|CB', 'RCB|CB', 'LB|LWB', 'CDM|CM', 'CDM|CM', 'CDM|CM', 'RW|RF|ST', 'CF|ST',
+    '4-3-3': ['GK', 'RB|RWB', 'LCB|CB', 'RCB|CB', 'LB|LWB', 'CDM|CM', 'CDM|CM', 'CDM|CM', 'RW|RF|ST', 'CF|ST',
               'LW|LF|ST'],
-    '4-4-2':   ['GK', 'RB|RWB', 'RCB|CB', 'LCB|CB', 'LB|LWB', 'RM|RW', 'CDM|CM', 'CDM|CM', 'LM|LW', 'CF|ST', 'CF|ST'],
-    '4-5-1':   ['GK', 'RB|RWB', 'RCB|CB', 'LCB|CB', 'LB|LWB', 'RM|RW', 'CDM|CM', 'CDM|CM', 'LM|LW', 'CF|ST', 'CF|ST'],
+    '4-4-2': ['GK', 'RB|RWB', 'RCB|CB', 'LCB|CB', 'LB|LWB', 'RM|RW', 'CDM|CM', 'CDM|CM', 'LM|LW', 'CF|ST', 'CF|ST'],
+    '4-5-1': ['GK', 'RB|RWB', 'RCB|CB', 'LCB|CB', 'LB|LWB', 'RM|RW', 'CDM|CM', 'CDM|CM', 'LM|LW', 'CF|ST', 'CF|ST'],
     '3-4-1-2': ['GK', 'RCB|CB', 'CB', 'LCB|CB', 'RM|RW', 'CDM|CM', 'CDM|CM', 'LM|LW', 'CAM|CF', 'CF|ST', 'CF|ST'],
-    '3-4-3':   ['GK', 'RCB|CB', 'CB', 'LCB|CB', 'RWB|RM', 'CDM|CM', 'CDM|CM', 'LWB|LM', 'RW|RF|ST', 'CF|ST', 'LW|LF|ST'],
-    '3-5-2':   ['GK', 'RCB|CB', 'CB', 'LCB|CB', 'RM|RWB|RB', 'CDM|CM', 'CDM|CM', 'CDM|CM', 'LM|LWB|LB', 'CF|ST', 'CF|ST']}
+    '3-4-3': ['GK', 'RCB|CB', 'CB', 'LCB|CB', 'RWB|RM', 'CDM|CM', 'CDM|CM', 'LWB|LM', 'RW|RF|ST', 'CF|ST', 'LW|LF|ST'],
+    '3-5-2': ['GK', 'RCB|CB', 'CB', 'LCB|CB', 'RM|RWB|RB', 'CDM|CM', 'CDM|CM', 'CDM|CM', 'LM|LWB|LB', 'CF|ST', 'CF|ST']}
 
 
 def load_players_per_team(team, player_list, national):
@@ -99,6 +103,7 @@ def compose_best_squad(team, player_df, row):
 
 
 def change_club_name_to_match_fifa(club):
+    """Some countries are called differently in the FIFA dataset vs the historic fixtures."""
     parsed_name = club
     if club == 'China':
         parsed_name = 'China PR'
@@ -109,6 +114,7 @@ def change_club_name_to_match_fifa(club):
     if club == 'Guinea-Bissau':
         parsed_name = 'Guinea Bissau'
     return parsed_name
+
 
 def parse_work_rate(work_rate_column):
     """Work rate is given in high, medium or low. We have to parse it to integers."""
@@ -125,7 +131,9 @@ def parse_work_rate(work_rate_column):
     })
     return work_rate_column
 
+
 def load_all_different_player_data():
+    """Load all player data."""
     player_data = {
         2022: pd.read_csv('fifa_player_data/players_22.csv'),
         2021: pd.read_csv('fifa_player_data/players_21.csv'),
@@ -140,7 +148,7 @@ def load_all_different_player_data():
 
 
 def engineer_features(pred_df=None):
-
+    """Create features for a set of given matches or our entire data set."""
     if pred_df is None:
         fixture_overview_df = pd.read_csv('prepped_data_sources/prepped_fixture_overview.csv')
         int_fixture_overview_df = pd.read_csv('prepped_data_sources/fixture_overview_international.csv')
@@ -274,7 +282,6 @@ def engineer_features(pred_df=None):
 
 
 if __name__ == '__main__':
-
     fixture_overview_df = engineer_features()
 
     fixture_overview_df.to_csv('prepped_data_sources/int_prepped_data_set.csv')

@@ -1,13 +1,13 @@
 from feature_engineer import engineer_features
 import pandas as pd
 import tensorflow as tf
-from match_prediction_regression import sign_penalty, create_feature_names
+from train_evaluate_dnn import sign_penalty, create_feature_names
 import pickle
 
 if __name__ == '__main__':
     # matches_to_predict = pd.DataFrame({"HomeTeam": 'Arsenal', 'AwayTeam': "", "Year": 2022, "national_game": 0}, index=[0])
 
-    matches_to_predict = pd.read_csv('fifa-world-cup-2022-UTC.csv')
+    matches_to_predict = pd.read_csv('data/fifa-world-cup-2022-UTC.csv')
     matches_to_predict['national_game'] = 1
     matches_to_predict['Year'] = 2022
     matches_to_predict.rename({'Home Team': 'HomeTeam', 'Away Team': 'AwayTeam'}, axis=1, inplace=True)
@@ -16,12 +16,10 @@ if __name__ == '__main__':
 
     engineered_df = engineer_features(matches_to_predict)
 
-    print(engineered_df)
-
     tf.keras.losses.sign_penalty = sign_penalty
     model = tf.keras.models.load_model('regression_model_0.818306543109031.csv',
                                            custom_objects={'sign_penalty': sign_penalty})
-    scaler = pickle.load(open('scaler.pkl', 'rb'))
+    scaler = pickle.load(open('scalers/scaler.pkl', 'rb'))
 
     # define line definitions and features we want to extract (field is every position excl. goalkeeper)
     line_definitions = {"goal": ['GK'], "def": ['B'], "mid": ['M'], "att": ['CAM', 'CF', 'ST'],

@@ -5,7 +5,7 @@ import pandas as pd
 
 
 if __name__ == '__main__':
-    games_df = pd.read_csv('add_international_games.csv', parse_dates=True)
+    games_df = pd.read_csv('data/add_international_games.csv', parse_dates=True)
 
     # cut off years for which we can not make teams
     games_df['date'] = pd.to_datetime(games_df['date'], format='%Y-%m-%d')

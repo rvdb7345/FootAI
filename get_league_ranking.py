@@ -6,20 +6,35 @@ import tensorflow_decision_forests as tfdf
 import pickle
 
 if __name__ == '__main__':
-    matches_to_predict = pd.DataFrame({"HomeTeam": 'Uruguay', 'AwayTeam': "Germany", "Year": 2022,
-                                       "national_game": 1}, index=[0])
+    matches_to_predict = pd.read_csv('data/fifa-world-cup-2022-UTC.csv')
+    matches_to_predict['national_game'] = 1
+    matches_to_predict['Year'] = 2022
+    matches_to_predict.rename({'Home Team': 'HomeTeam', 'Away Team': 'AwayTeam'}, axis=1, inplace=True)
 
-    # matches_to_predict = pd.read_csv('fifa-world-cup-2022-UTC.csv')
-    # matches_to_predict['national_game'] = 1
-    # matches_to_predict['Year'] = 2022
-    # matches_to_predict.rename({'Home Team': 'HomeTeam', 'Away Team': 'AwayTeam'}, axis=1, inplace=True)
-    # matches_to_predict.dropna(axis=1, inplace=True)
-    # matches_to_predict.dropna(axis=0, inplace=True)
+    matches_to_predict.dropna(axis=1, inplace=True)
+    matches_to_predict.dropna(axis=0, inplace=True)
+
+    all_participants = matches_to_predict['HomeTeam'].unique().tolist()
+    all_participants.append('Costa Rica')
+    all_participants.append('Saudi Arabia')
+
+    matches_to_predict = pd.DataFrame(columns=matches_to_predict.columns)
+    for home in all_participants:
+        for away in all_participants:
+            if home != away:
+                matches_to_predict = matches_to_predict.append({"HomeTeam": home, 'AwayTeam': away, "Year": 2022,
+                                                                "national_game": 1}, ignore_index=True)
+
+    matches_to_predict.dropna(axis=1, inplace=True)
+    matches_to_predict.dropna(axis=0, inplace=True)
+
+    print(matches_to_predict)
 
     engineered_df = engineer_features(matches_to_predict)
+    print(engineered_df)
 
+    tf.keras.losses.sign_penalty = sign_penalty
     model = tf.keras.models.load_model('trained_models/gbm_regression_model_0.5366107094799906')
-    # model = tf.keras.models.load_model('trained_models/gbm_homegoals_regression_model_0.408993567646892')
 
     scaler = pickle.load(open('scalers/gbm_scaler.pkl', 'rb'))
 
@@ -59,5 +74,27 @@ if __name__ == '__main__':
     matches_to_predict['goal_difference'] = goal_diffs
     matches_to_predict['rounded_diff'] = matches_to_predict['goal_difference'].apply(lambda x: round(x))
     print(matches_to_predict[['HomeTeam', 'AwayTeam', 'goal_difference', 'rounded_diff']])
+
+    total_ranking = []
+
+    for participant in all_participants:
+        outcomes_home = matches_to_predict[matches_to_predict['HomeTeam'] == participant]
+        outcomes_away = matches_to_predict[matches_to_predict['AwayTeam'] == participant]
+
+        total_score = 0
+        total_score += len(outcomes_home[outcomes_home['rounded_diff'] >= 1]) * 3
+        total_score += len(outcomes_home[outcomes_home['rounded_diff'] == 0]) * 1
+        total_score += len(outcomes_away[outcomes_away['rounded_diff'] <= -1]) * 3
+        total_score += len(outcomes_away[outcomes_away['rounded_diff'] == 0]) * 1
+
+        total_ranking.append((participant, total_score))
+
+    sorted_outcome = sorted(
+        total_ranking,
+        key=lambda t: t[1],
+        reverse=True
+    )
+
+    print(sorted_outcome)
 
 

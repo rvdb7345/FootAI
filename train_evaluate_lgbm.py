@@ -1,3 +1,4 @@
+"""Train, evaluate and save a light gradient boosting machine."""
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -7,6 +8,8 @@ from sklearn.metrics import mean_absolute_error
 import tensorflow as tf
 from sklearn import preprocessing
 import pickle
+import tensorflow_decision_forests as tfdf
+from sklearn.metrics import accuracy_score, confusion_matrix
 
 MAX_EPOCHS = 4000
 
@@ -35,7 +38,6 @@ def fit(model, X_train, y_train, X_val, y_val):
                         callbacks=[early_stopping],
                         batch_size=32)
     return history
-
 
 
 def create_tensorflow_model_regressor(num_features):
@@ -81,6 +83,7 @@ def plot_loss(history):
     plt.grid(True)
     plt.show()
 
+
 def plot_predictions(true, preds, label=''):
     """Plot the predicted value versus the real values."""
     fix, ax = plt.subplots()
@@ -103,6 +106,7 @@ def plot_predictions(true, preds, label=''):
 
     plt.grid(True)
     plt.show()
+
 
 def create_feature_names(line_definitions, features_to_use, features_to_extract, teams):
     # generate list of features to load from the prepped dataset
@@ -128,24 +132,25 @@ def create_feature_names(line_definitions, features_to_use, features_to_extract,
 
     return features_to_use
 
+
 def create_predictable(fixture_overview_df):
     # add predictable
     fixture_overview_df['team_victory'] = fixture_overview_df['HomeTeamScore'] - fixture_overview_df['AwayTeamScore']
 
     # cap large differences between matches to prevent overfitting on outliers
-    fixture_overview_df.loc[fixture_overview_df['team_victory'] > 3, 'team_victory'] = 3
-    fixture_overview_df.loc[fixture_overview_df['team_victory'] < -3, 'team_victory'] = -3
+    fixture_overview_df.loc[fixture_overview_df['team_victory'] > 4, 'team_victory'] = 4
+    fixture_overview_df.loc[fixture_overview_df['team_victory'] < -4, 'team_victory'] = -4
 
     return fixture_overview_df
 
 
-
 if __name__ == '__main__':
-    experiment_name = 'rel'
+    experiment_name = 'gbm_medium'
 
     fixture_overview_df = pd.read_csv('prepped_data_sources/prepped_data_set.csv')
     fixture_overview_df = create_predictable(fixture_overview_df)
 
+    fixture_overview_df.dropna(axis=0, inplace=True)
 
     # define line definitions and features we want to extract (field is every position excl. goalkeeper)
     line_definitions = {"goal": ['GK'], "def": ['B'], "mid": ['M'], "att": ['CAM', 'CF', 'ST'],
@@ -168,22 +173,19 @@ if __name__ == '__main__':
     }
 
     # the different positions and teams
-    # teams = ['home_team', 'away_team', 'rel']
-    teams = ['rel']
-
+    teams = ['home_team', 'away_team', 'rel']
+    # teams = ['rel']
 
     # list for the features and the base of features that are not player dependent
     features_to_use = ['national_game']
     features_to_use = create_feature_names(line_definitions, features_to_use, features_to_extract, teams)
-
-    # print(fixture_overview_df[features_to_use + ['team_victory']].corr()['team_victory'].sort_values(ascending=False)[0:30])
 
     # preprocess the data
     fitted_scaler = preprocessing.RobustScaler()
     fitted_scaler.fit(fixture_overview_df[features_to_use].values)
     scaled_X = fitted_scaler.transform(fixture_overview_df[features_to_use].values)
 
-    pickle.dump(fitted_scaler, open(f'{experiment_name}_scaler.pkl', 'wb'))
+    pickle.dump(fitted_scaler, open(f'scalers/{experiment_name}_scaler.pkl', 'wb'))
 
     # split data in to train, validation and test
     X_train, X_test, y_train, y_test = train_test_split(
@@ -198,20 +200,83 @@ if __name__ == '__main__':
     print(f'test length: {len(X_test)}')
 
     # create the model
-    model = create_tensorflow_model_regressor(features_to_use)
+    # tf.keras.losses.sign_penalty = sign_penalty
+    # tuner = tfdf.tuner.RandomSearch(num_trials=30)
+    # tuner.choice("num_candidate_attributes_ratio", [1.0, 0.9, 0.8, 0.7, 0.6])
+    #
+    # local_search_space = tuner.choice("growing_strategy", ["LOCAL"])
+    # local_search_space.choice("max_depth", [4, 12, 15, 25, 30, 40, 50, 70 ])
+    # local_search_space.choice("num_trees", [100, 200, 300, 1500, 2000, 5000, 7500, 10000])
+    # local_search_space.choice("l2_regularization", [0.0, 0.1, 0.2])
+    # local_search_space.choice("l1_regularization", [0.0, 0.1, 0.2])
+    #
+    # global_search_space = tuner.choice(
+    #     "growing_strategy", ["BEST_FIRST_GLOBAL"], merge=True)
+    # global_search_space.choice("max_num_nodes", [16, 32, 64, 128, 256])
+
+    model = tfdf.keras.GradientBoostedTreesModel(task=tfdf.keras.Task.REGRESSION, num_trees=8000, max_depth=70,
+                                                 verbose=2, l2_regularization=0.3, l1_regularization=0.3,
+                                                 shrinkage=0.02, min_examples=100,
+                                                 compute_permutation_variable_importance=True,
+                                                 early_stopping='LOSS_INCREASE',
+                                                 early_stopping_num_trees_look_ahead=100)
+    # model = create_tensorflow_model_regressor(features_to_use)
 
     # fit the model and visualise the results
-    history = fit(model, X_train, y_train, X_val, y_val)
-    plot_loss(history)
+    train_ds = tfdf.keras.pd_dataframe_to_tf_dataset(
+        fixture_overview_df[features_to_use + ['team_victory']].iloc[:20000], label='team_victory',
+        task=tfdf.keras.Task.REGRESSION)
+    test_ds = tfdf.keras.pd_dataframe_to_tf_dataset(
+        fixture_overview_df[features_to_use + ['team_victory']].iloc[20000:], label='team_victory',
+        task=tfdf.keras.Task.REGRESSION)
+
+    print(np.isnan(y_train).sum())
+    history = model.fit(train_ds, verbose=2)
+
+    inspector = model.make_inspector()
+    logs = inspector.training_logs()
+    plt.figure(figsize=(12, 4))
+
+    plt.subplot(1, 2, 1)
+    plt.plot([log.num_trees for log in logs], [log.evaluation.rmse for log in logs])
+    plt.xlabel("Number of trees")
+    plt.ylabel("Accuracy (out-of-bag)")
+
+    plt.subplot(1, 2, 2)
+    plt.plot([log.num_trees for log in logs], [log.evaluation.loss for log in logs])
+    plt.xlabel("Number of trees")
+    plt.ylabel("Logloss (out-of-bag)")
+
+    plt.show()
+
+    print(inspector.variable_importances())
+
+    # plot_loss(history)
 
     # predict for the training and the test data and visualise the results
-    test_pred = model.predict(X_test, verbose=0)
-    train_pred = model.predict(X_train, verbose=0)
-    plot_predictions(y_test, test_pred, label='test')
-    plot_predictions(y_train, train_pred, label='train')
+    test_pred = model.predict(test_ds, verbose=0)
+    train_pred = model.predict(train_ds, verbose=0)
+
+    plot_predictions(fixture_overview_df['team_victory'].iloc[20000:], test_pred, label='test')
+    plot_predictions(fixture_overview_df['team_victory'].iloc[:20000], train_pred, label='train')
 
     # calculate the test and training scores
-    print(f'Test score: {mean_absolute_error(y_test, test_pred)}')
-    print(f'Train score: {mean_absolute_error(y_train, train_pred)}')
+    print(f"Test score: {mean_absolute_error(fixture_overview_df['team_victory'].iloc[20000:], test_pred)}")
+    print(f"Train score: {mean_absolute_error(fixture_overview_df['team_victory'].iloc[:20000], train_pred)}")
 
-    model.save(f'{experiment_name}_regression_model_{mean_absolute_error(y_test, test_pred)}')
+    test_win_true = fixture_overview_df['team_victory'].iloc[20000:].copy()
+    test_win_true[(test_win_true < 0.5) & (test_win_true > -0.5)] = 0
+    test_win_true[(test_win_true > 0.5)] = 1
+    test_win_true[(test_win_true < -0.5)] = -1
+
+    test_pred_classification = test_pred.copy()
+    test_pred_classification[(test_pred_classification < 0.5) & (test_pred_classification > -0.5)] = 0
+    test_pred_classification[(test_pred_classification > 0.5)] = 1
+    test_pred_classification[(test_pred_classification < -0.5)] = -1
+
+    print("Test confusion matrix \n", confusion_matrix(test_win_true, test_pred_classification))
+    print(f'Test score: {accuracy_score(test_win_true, test_pred_classification)}')
+
+    mae_test = mean_absolute_error(fixture_overview_df['team_victory'].iloc[20000:], test_pred)
+    model.save(
+        f"trained_models/{experiment_name}_regression_model_{mae_test}")
